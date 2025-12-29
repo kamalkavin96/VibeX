@@ -1,16 +1,34 @@
-version: "3.8"
+version: "3.9"
 
 services:
   minio:
     image: quay.io/minio/minio
-    container_name: minio
+    container_name: vibex-minio
     restart: unless-stopped
     ports:
-      - "9000:9000"   # S3 API
-      - "9001:9001"   # MinIO Console
+      - "9000:9000"
+      - "9001:9001"
     volumes:
-      - ~/minio/data:/data
+      - minio-data:/data
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
     command: server /data --console-address ":9001"
+
+  pgdb:
+    image: postgres:16
+    container_name: vibex-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: vibex_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      TZ: UTC
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+  minio-data:
