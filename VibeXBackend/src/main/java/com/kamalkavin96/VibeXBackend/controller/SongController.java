@@ -5,8 +5,10 @@ import com.kamalkavin96.VibeXBackend.dto.request.SongUpdateRequest;
 import com.kamalkavin96.VibeXBackend.dto.response.SongResponse;
 import com.kamalkavin96.VibeXBackend.service.SongService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,9 +20,34 @@ public class SongController {
 
     private final SongService songService;
 
-    @PostMapping
-    public ResponseEntity<SongResponse> create(@RequestBody SongCreateRequest request) {
-        return ResponseEntity.ok(songService.create(request));
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<SongResponse> create(
+            @RequestParam("bucket") String bucket,
+
+            @RequestParam("title") String title,
+            @RequestParam("albumId") Long albumId,
+            @RequestParam("labelId") Long labelId,
+            @RequestParam("languageId") Long languageId,
+
+            @RequestParam("singerIds") Long[] singerIds,
+            @RequestParam("lyricistIds") Long[] lyricistIds,
+            @RequestParam("musicianIds") Long[] musicianIds,
+            @RequestParam("directorIds") Long[] directorIds,
+            @RequestParam("castIds") Long[] castIds,
+
+            @RequestPart("file") MultipartFile file
+    ) {
+        SongCreateRequest request = new SongCreateRequest();
+        request.setTitle(title);
+        request.setAlbumId(albumId);
+        request.setLabelId(labelId);
+        request.setLanguageId(languageId);
+        request.setSingerIds(singerIds);
+        request.setLyricistIds(lyricistIds);
+        request.setMusicianIds(musicianIds);
+        request.setDirectorIds(directorIds);
+        request.setCastIds(castIds);
+        return ResponseEntity.ok(songService.createWithFile(bucket, request, file));
     }
 
     @GetMapping("/{id}")

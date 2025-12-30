@@ -3,11 +3,14 @@ package com.kamalkavin96.VibeXBackend.service;
 import com.kamalkavin96.VibeXBackend.dto.request.SongCreateRequest;
 import com.kamalkavin96.VibeXBackend.dto.request.SongUpdateRequest;
 import com.kamalkavin96.VibeXBackend.dto.response.SongResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface SongService {
+
+    SongResponse createWithFile(String bucket, SongCreateRequest request, MultipartFile file);
 
     SongResponse create(SongCreateRequest request);
 

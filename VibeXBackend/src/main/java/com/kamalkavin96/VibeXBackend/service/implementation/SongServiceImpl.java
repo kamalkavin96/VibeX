@@ -5,11 +5,17 @@ import com.kamalkavin96.VibeXBackend.dto.request.SongUpdateRequest;
 import com.kamalkavin96.VibeXBackend.dto.response.SongResponse;
 import com.kamalkavin96.VibeXBackend.mapper.SongMapper;
 import com.kamalkavin96.VibeXBackend.model.Song;
+import com.kamalkavin96.VibeXBackend.model.SongFile;
+import com.kamalkavin96.VibeXBackend.repository.SongFileRepository;
 import com.kamalkavin96.VibeXBackend.repository.SongRepository;
+import com.kamalkavin96.VibeXBackend.service.MinioService;
 import com.kamalkavin96.VibeXBackend.service.SongService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,6 +24,36 @@ import java.util.UUID;
 public class SongServiceImpl implements SongService {
 
     private final SongRepository songRepository;
+    private final SongFileRepository songFileRepository;
+    private final MinioService minioService;
+
+    @Override
+    @Transactional
+    public SongResponse createWithFile(
+            String bucket,
+            SongCreateRequest request,
+            MultipartFile file
+    ) {
+
+        Song song = SongMapper.toEntity(request);
+        song = songRepository.save(song);
+        String objectKey = minioService.uploadSong(
+                bucket,
+                song.getId(),
+                file
+        );
+        SongFile songFile = new SongFile();
+        songFile.setSongId(song.getId());
+        songFile.setObjectKey(objectKey);
+        songFile.setFileSize(file.getSize());
+        songFile.setCodec(file.getContentType());
+        songFile.setCreatedAt(Instant.now());
+        songFile.setDurationSeconds(null);
+        songFile.setBitrateKbps(null);
+        songFile.setSampleRateHz(null);
+        songFileRepository.save(songFile);
+        return SongMapper.toResponse(song);
+    }
 
     @Override
     public SongResponse create(SongCreateRequest request) {
