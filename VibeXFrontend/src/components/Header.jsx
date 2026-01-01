@@ -1,6 +1,6 @@
 import ThemeToggle from "./ThemeToggle";
 
-export default function Header({ setOpen }) {
+export default function Header({ setOpen, dark, setDark }) {
   return (
     <header
       className="
@@ -41,7 +41,7 @@ export default function Header({ setOpen }) {
       {/* RIGHT */}
       <div className="flex items-center gap-2">
         {/* Theme Toggle */}
-        <ThemeToggle />
+        <ThemeToggle dark={dark} setDark={setDark}/>
 
         {/* Divider */}
         <span className="h-5 w-px bg-gray-200 dark:bg-zinc-700" />

@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Chill Nights",
+    "userId": 1,
+    "description": "Relaxing lo-fi and ambient tracks for late nights"
+  },
+  {
+    "name": "Workout Boost",
+    "userId": 1,
+    "description": "High-energy tracks to power your workout sessions"
+  },
+  {
+    "name": "Focus Flow",
+    "userId": 2,
+    "description": "Instrumental and soft beats to help you stay focused"
+  },
+  {
+    "name": "Morning Vibes",
+    "userId": 2,
+    "description": "Fresh and uplifting songs to start your day right"
+  },
+  {
+    "name": "Late Night Drive",
+    "userId": 3,
+    "description": "Synthwave and electronic music for night drives"
+  },
+  {
+    "name": "Party Hits",
+    "userId": 3,
+    "description": "Popular party anthems and dance hits"
+  },
+  {
+    "name": "Romantic Mood",
+    "userId": 4,
+    "description": "Love songs and soulful melodies"
+  },
+  {
+    "name": "Retro Classics",
+    "userId": 4,
+    "description": "Timeless classics from the golden music era"
+  },
+  {
+    "name": "Indie Discovery",
+    "userId": 5,
+    "description": "Handpicked indie and alternative tracks"
+  },
+  {
+    "name": "Sleep & Relax",
+    "userId": 5,
+    "description": "Calm and soothing tracks for better sleep"
+  }
+]
