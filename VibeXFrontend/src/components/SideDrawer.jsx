@@ -1,11 +1,6 @@
-import { useState } from "react";
+import { Link } from "react-router";
 
 export default function SideDrawer({ open, setOpen }) {
-  const [expanded, setExpanded] = useState(null);
-
-  const toggle = (key) => {
-    setExpanded(expanded === key ? null : key);
-  };
 
   // Close drawer on item click (mobile only — desktop unaffected)
   const closeDrawer = () => setOpen(false);
@@ -24,52 +19,25 @@ export default function SideDrawer({ open, setOpen }) {
     >
       <nav className="p-3 text-sm font-medium space-y-1">
 
-        <NavItem icon={<HomeIcon />} label="Home" onClick={closeDrawer} />
-        <NavItem icon={<DashboardIcon />} label="Dashboard" onClick={closeDrawer} />
+        <Link to="/">
+          <NavItem icon={<HomeIcon />} label="Home" onClick={closeDrawer} />
+        </Link>
 
-        <NavGroup
-          icon={<MusicIcon />}
-          label="Songs"
-          open={expanded === "songs"}
-          onToggle={() => toggle("songs")}
-          onItemClick={closeDrawer}
-          items={[
-            { label: "Discover", icon: <CompassIcon /> },
-            { label: "Trending", icon: <FireIcon /> },
-            { label: "Liked Songs", icon: <HeartIcon /> },
-            { label: "Playlists", icon: <PlaylistIcon /> },
-            { label: "Recently Played", icon: <ClockIcon /> },
-          ]}
-        />
+        <Link to="/playlist">
+          <NavItem icon={<PlaylistIcon />} label="Playlists" onClick={closeDrawer} />
+        </Link>
 
-        <NavGroup
-          icon={<VideoIcon />}
-          label="Videos"
-          open={expanded === "videos"}
-          onToggle={() => toggle("videos")}
-          onItemClick={closeDrawer}
-          items={[
-            { label: "Live", icon: <LiveIcon /> },
-            { label: "Movie", icon: <MovieIcon /> },
-            { label: "Music Videos", icon: <MusicVideoIcon /> },
-            { label: "Podcasts", icon: <PodcastIcon /> },
-          ]}
-        />
+        <Link to="/dashboard">
+          <NavItem icon={<DashboardIcon />} label="Dashboard" onClick={closeDrawer} />
+        </Link>
 
-        <NavGroup
-          icon={<WaveIcon />}
-          label="Vibes"
-          open={expanded === "vibes"}
-          onToggle={() => toggle("vibes")}
-          onItemClick={closeDrawer}
-          items={[
-            { label: "Chill", icon: <ChillIcon /> },
-            { label: "Workout", icon: <WorkoutIcon /> },
-            { label: "Party", icon: <PartyIcon /> },
-            { label: "Focus", icon: <FocusIcon /> },
-            { label: "Sleep", icon: <SleepIcon /> },
-          ]}
-        />
+        <Link to="/songs">
+          <NavItem icon={<DashboardIcon />} label="Songs" onClick={closeDrawer} />
+        </Link>
+
+        
+        <NavItem icon={<HeartIcon />} label="Liked Songs" onClick={closeDrawer} />
+        <NavItem icon={<RecentPlayedIcon />} label="Recently Played" onClick={closeDrawer} />
 
         <div className="mt-3 border-t border-gray-200 dark:border-zinc-800 pt-3">
           <NavItem icon={<DownloadIcon />} label="Downloads" onClick={closeDrawer} />
@@ -206,7 +174,61 @@ const ChillIcon = () => <Icon path="M3 12h18" />;
 const WorkoutIcon = () => <Icon path="M4 10h16M6 14h12" />;
 const PartyIcon = () => <Icon path="M12 2l4 8-4 12-4-12z" />;
 const FocusIcon = () => <Icon path="M12 8a4 4 0 100 8" />;
-const SleepIcon = () => <Icon path="M3 12h6l-3 6" />;
+// const SleepIcon = () => <Icon path="M3 12h6l-3 6" />;
+const RecentPlayedIcon  = () => (
+  <Icon
+    path="
+      M3 12a9 9 0 1 0 3-6.7
+      M3 4v4h4
+      M12 7v5l3 2
+    "
+  />
+);
+
+
 
 const DownloadIcon = () => <Icon path="M12 3v12l4-4m-4 4l-4-4 M4 19h16" />;
-const SettingsIcon = () => <Icon path="M12 15a3 3 0 100-6" />;
+// const SettingsIcon = () => <Icon path="M12 15a3 3 0 100-6" />;
+
+const SettingsIcon = ({ size = 16 }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="12" cy="12" r="3" />
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06
+      a2 2 0 0 1-2.83 2.83l-.06-.06
+      a1.65 1.65 0 0 0-1.82-.33
+      a1.65 1.65 0 0 0-1 1.51V21
+      a2 2 0 0 1-4 0v-.09
+      a1.65 1.65 0 0 0-1-1.51
+      a1.65 1.65 0 0 0-1.82.33l-.06.06
+      a2 2 0 0 1-2.83-2.83l.06-.06
+      a1.65 1.65 0 0 0 .33-1.82
+      a1.65 1.65 0 0 0-1.51-1H3
+      a2 2 0 0 1 0-4h.09
+      a1.65 1.65 0 0 0 1.51-1
+      a1.65 1.65 0 0 0-.33-1.82l-.06-.06
+      a2 2 0 0 1 2.83-2.83l.06.06
+      a1.65 1.65 0 0 0 1.82.33
+      h.01
+      a1.65 1.65 0 0 0 1-1.51V3
+      a2 2 0 0 1 4 0v.09
+      a1.65 1.65 0 0 0 1 1.51
+      h.01
+      a1.65 1.65 0 0 0 1.82-.33l.06-.06
+      a2 2 0 0 1 2.83 2.83l-.06.06
+      a1.65 1.65 0 0 0-.33 1.82
+      v.01
+      a1.65 1.65 0 0 0 1.51 1H21
+      a2 2 0 0 1 0 4h-.09
+      a1.65 1.65 0 0 0-1.51 1z"
+    />
+  </svg>
+);

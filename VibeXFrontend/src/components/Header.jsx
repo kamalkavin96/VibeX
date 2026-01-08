@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Header({ setOpen, dark, setDark }) {
@@ -41,14 +42,15 @@ export default function Header({ setOpen, dark, setDark }) {
       {/* RIGHT */}
       <div className="flex items-center gap-2">
         {/* Theme Toggle */}
-        <ThemeToggle dark={dark} setDark={setDark}/>
+        <ThemeToggle dark={dark} setDark={setDark} />
 
         {/* Divider */}
         <span className="h-5 w-px bg-gray-200 dark:bg-zinc-700" />
 
         {/* Login Button */}
-        <button
-          className="
+        <Link to="/login">
+          <button
+            className="
             px-4 py-1.5
             text-sm font-medium
             rounded-full
@@ -57,9 +59,10 @@ export default function Header({ setOpen, dark, setDark }) {
             active:scale-95
             transition
           "
-        >
-          Login
-        </button>
+          >
+            Login
+          </button>
+        </Link>
       </div>
     </header>
   );
