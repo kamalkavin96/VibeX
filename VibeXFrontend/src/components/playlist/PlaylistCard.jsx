@@ -74,7 +74,7 @@ const PlaylistCard = ({ playlist, onDelete }) => {
       <div className="relative h-36 rounded-xl mb-3 overflow-hidden">
         {!imgError && playlist.imageKey ? (
           <img
-            src={`${API_BASE_URL}/api/playlists/${playlist.id}/image`}
+            src={`${API_BASE_URL}/api/playlists/image/${playlist.imageKey}`}
             alt="Playlist cover"
             onError={() => setImgError(true)}
             className="h-full w-full object-cover"

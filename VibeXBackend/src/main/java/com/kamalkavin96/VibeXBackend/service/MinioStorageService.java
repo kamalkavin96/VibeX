@@ -18,16 +18,14 @@ public class MinioStorageService {
     private final MinioClient minioClient;
     private final MinioProperties properties;
 
-    private static final String BUCKET = "playlist-images";
-
     public String uploadPlaylistImage(MultipartFile file) {
         try {
             String extension = getExtension(file.getOriginalFilename());
-            String objectKey = "playlists/" + UUID.randomUUID() + extension;
+            String objectKey =  UUID.randomUUID() + extension;
 
             minioClient.putObject(
                     PutObjectArgs.builder()
-                            .bucket(BUCKET)
+                            .bucket(properties.getBuckets().get("playlist-images"))
                             .object(objectKey)
                             .stream(
                                     file.getInputStream(),

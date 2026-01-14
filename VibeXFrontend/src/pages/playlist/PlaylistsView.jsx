@@ -23,19 +23,17 @@ export default function PlaylistsView() {
   const [deleteId, setDeleteId] = useState(null);
   const [deleteName, setDeleteName] = useState("");
 
-  const fetchPlaylists = async () => {
-    const res = await getAllPlaylists();
-    setPlaylists(normalizePlaylists(res?.data || []));
-  };
-
   useEffect(() => {
+    const fetchPlaylists = async () => {
+      const res = await getAllPlaylists();
+      setPlaylists(normalizePlaylists(res?.data || []));
+    };
     fetchPlaylists();
-  }, []);
+  }, [open, deleteOpen]);
 
   return (
     <main className="pt-12 lg:pl-64 min-h-screen bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-gray-100">
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-8">
-
         {/* HEADER */}
         <header className="flex items-center justify-between">
           <div>
@@ -74,7 +72,7 @@ export default function PlaylistsView() {
             onClose={() => setOpen(false)}
             onCreate={async (payload) => {
               await createPlaylist(payload);
-              await fetchPlaylists();
+              // await fetchPlaylists();
               setOpen(false);
             }}
           />
@@ -87,7 +85,7 @@ export default function PlaylistsView() {
             onClose={() => setDeleteOpen(false)}
             onDelete={async () => {
               await deletePlaylist(deleteId);
-              await fetchPlaylists();
+              // await fetchPlaylists();
               setDeleteOpen(false);
             }}
           />

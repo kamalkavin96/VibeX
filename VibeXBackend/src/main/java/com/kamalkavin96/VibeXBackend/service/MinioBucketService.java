@@ -1,14 +1,14 @@
 package com.kamalkavin96.VibeXBackend.service;
 
+import com.kamalkavin96.VibeXBackend.dto.response.BucketDetailsDto;
 import com.kamalkavin96.VibeXBackend.exception.MinioException;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
-import io.minio.RemoveBucketArgs;
+import io.minio.*;
 import io.minio.messages.Bucket;
+import io.minio.messages.Item;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -22,17 +22,57 @@ public class MinioBucketService {
 
     /* ===================== LIST BUCKETS ===================== */
 
-    public List<String> listBuckets() {
+    private String humanReadableSize(long bytes) {
+        if (bytes < 1024) return bytes + " B";
+        int exp = (int) (Math.log(bytes) / Math.log(1024));
+        String pre = "KMGTPE".charAt(exp - 1) + "";
+        return String.format("%.2f %sB", bytes / Math.pow(1024, exp), pre);
+    }
+
+
+    public List<BucketDetailsDto> listBuckets() {
         try {
-            return minioClient.listBuckets()
-                    .stream()
-                    .map(Bucket::name)
-                    .toList();
+            List<BucketDetailsDto> response = new ArrayList<>();
+
+            for (Bucket bucket : minioClient.listBuckets()) {
+
+                long totalSize = 0;
+                long objectCount = 0;
+
+                Iterable<Result<Item>> objects = minioClient.listObjects(
+                        ListObjectsArgs.builder()
+                                .bucket(bucket.name())
+                                .recursive(true)
+                                .build()
+                );
+
+                for (Result<Item> result : objects) {
+                    Item item = result.get();
+                    objectCount++;
+                    totalSize += item.size();
+                }
+
+                response.add(
+                        BucketDetailsDto.builder()
+                                .name(bucket.name())
+                                .creationDate(bucket.creationDate())
+                                .objectCount(objectCount)
+                                .totalSizeBytes(totalSize)
+                                .totalSizeReadable(humanReadableSize(totalSize))
+                                .build()
+                );
+            }
+
+            return response;
+
         } catch (Exception e) {
-            log.error("Failed to list buckets", e);
-            throw new MinioException("Unable to list buckets", e);
+            log.error("Failed to list buckets with details", e);
+            throw new MinioException("Unable to list bucket details", e);
         }
     }
+
+
+
 
     /* ===================== CREATE BUCKET ===================== */
 
