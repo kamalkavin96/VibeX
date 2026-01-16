@@ -1,22 +1,29 @@
 import { useState } from "react";
 
+function formatAlbumName(albumName) {
+  return albumName
+    .replace(/([a-z])([A-Z])/g, "$1 $2") // camelCase → camel Case
+    .replace(/\b\w/g, char => char.toUpperCase()); // capitalize words
+}
+
 export default function SongUploadModal({ onClose, onUpload }) {
-  const [file, setFile] = useState(null);
+  const [songFile, setSongFile] = useState(null);
+  const [thumbnailFile, setThumbnailFile] = useState(null);
   const [meta, setMeta] = useState({
     title: "",
-    artist: "",
-    album: "",
+    albumName: "",
+    singerName: "",
   });
 
   const submit = async () => {
-    if (!file) return alert("Please select a song file");
+    if (!songFile) return alert("Please select a song file");
+    if (!thumbnailFile) return alert("Please select a thumbnail file");
 
-    const formData = new FormData();
-    formData.append("file", file);
-    Object.entries(meta).forEach(([k, v]) =>
-      formData.append(k, v)
-    );
-    await onUpload(formData);
+    await onUpload({
+      songFile,
+      thumbnailFile,
+      ...meta,
+    });
   };
 
   return (
@@ -24,24 +31,20 @@ export default function SongUploadModal({ onClose, onUpload }) {
       <div className="bg-white dark:bg-zinc-900 p-6 rounded-xl w-full max-w-md space-y-5">
         <h3 className="text-lg font-semibold">Upload Song</h3>
 
-        {/* FILE INPUT */}
+        {/* FILE */}
         <label className="block">
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Song File
-          </span>
+          <span className="text-sm font-medium">Song File</span>
 
           <div className="mt-1 flex items-center gap-3">
             <label
               htmlFor="song-file"
-              className="px-4 py-2 rounded-lg cursor-pointer
-                         bg-indigo-600 text-white text-sm
-                         hover:bg-indigo-700"
+              className="px-4 py-2 rounded-lg bg-indigo-600 text-white cursor-pointer text-sm"
             >
-              Choose File
+              Choose Song
             </label>
 
-            <span className="text-sm text-gray-600 dark:text-gray-400 truncate">
-              {file ? file.name : "No file selected"}
+            <span className="text-sm truncate">
+              {songFile ? songFile.name : "No file selected"}
             </span>
           </div>
 
@@ -50,18 +53,43 @@ export default function SongUploadModal({ onClose, onUpload }) {
             type="file"
             accept="audio/*"
             className="hidden"
-            onChange={(e) => setFile(e.target.files[0])}
+            onChange={(e) => setSongFile(e.target.files[0])}
           />
         </label>
 
-        {/* META INPUTS */}
-        {["title", "artist", "album"].map((field) => (
+        {/* FILE */}
+        <label className="block">
+          <span className="text-sm font-medium">Song File</span>
+
+          <div className="mt-1 flex items-center gap-3">
+            <label
+              htmlFor="thumbnail-file"
+              className="px-4 py-2 rounded-lg bg-indigo-600 text-white cursor-pointer text-sm"
+            >
+              Choose Thumbnail
+            </label>
+
+            <span className="text-sm truncate">
+              {thumbnailFile ? thumbnailFile.name : "No file selected"}
+            </span>
+          </div>
+
+          <input
+            id="thumbnail-file"
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => setThumbnailFile(e.target.files[0])}
+          />
+        </label>
+
+        {/* META */}
+        {["title", "albumName", "singerName"].map((field) => (
           <input
             key={field}
-            placeholder={field}
-            className="w-full p-2 rounded-lg
-                       bg-gray-100 dark:bg-zinc-800
-                       focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            placeholder={formatAlbumName(field)}
+            className="w-full p-2 rounded-lg bg-gray-100 dark:bg-zinc-800"
+            value={meta[field]}
             onChange={(e) =>
               setMeta({ ...meta, [field]: e.target.value })
             }
@@ -70,20 +98,8 @@ export default function SongUploadModal({ onClose, onUpload }) {
 
         {/* ACTIONS */}
         <div className="flex justify-end gap-3 pt-4">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 rounded-lg border border-gray-300 
-                       text-gray-700 hover:bg-gray-100
-                       dark:border-zinc-700 dark:text-gray-300 dark:hover:bg-zinc-800"
-          >
-            Cancel
-          </button>
-
-          <button
-            onClick={submit}
-            className="px-4 py-2 rounded-lg bg-green-600 
-                       hover:bg-green-700 text-white"
-          >
+          <button onClick={onClose} className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg">Cancel</button>
+          <button onClick={submit} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
             Upload
           </button>
         </div>

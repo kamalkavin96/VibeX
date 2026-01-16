@@ -9,14 +9,8 @@ public class SongMapper {
     public static Song toEntity(SongCreateRequest req) {
         Song song = new Song();
         song.setTitle(req.getTitle());
-        song.setAlbumId(req.getAlbumId());
-        song.setLabelId(req.getLabelId());
-        song.setLanguageId(req.getLanguageId());
-        song.setSingerIds(req.getSingerIds());
-        song.setLyricistIds(req.getLyricistIds());
-        song.setMusicianIds(req.getMusicianIds());
-        song.setDirectorIds(req.getDirectorIds());
-        song.setCastIds(req.getCastIds());
+        song.setAlbumName(req.getAlbumName());
+        song.setSingerName(req.getAlbumName());
         return song;
     }
 
@@ -24,14 +18,10 @@ public class SongMapper {
         SongResponse res = new SongResponse();
         res.setId(song.getId());
         res.setTitle(song.getTitle());
-        res.setAlbumId(song.getAlbumId());
-        res.setLabelId(song.getLabelId());
-        res.setLanguageId(song.getLanguageId());
-        res.setSingerIds(song.getSingerIds());
-        res.setLyricistIds(song.getLyricistIds());
-        res.setMusicianIds(song.getMusicianIds());
-        res.setDirectorIds(song.getDirectorIds());
-        res.setCastIds(song.getCastIds());
+        res.setAlbumName(song.getAlbumName());
+        res.setSingerName(song.getSingerName());
+        res.setSongKey(song.getSongKey());
+        res.setThumbnailKey(song.getThumbnailKey());
         res.setCreatedAt(song.getCreatedAt());
         return res;
     }

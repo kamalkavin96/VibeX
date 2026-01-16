@@ -57,9 +57,11 @@ public class PlayListServiceImpl implements PlayListService {
 
     @Override
     public void delete(Long id) {
-        if (!playListRepository.existsById(id)) {
-            throw new EntityNotFoundException("Playlist not found with id: " + id);
-        }
+        PlayList playList = playListRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntityNotFoundException("Playlist not found with id: " + id)
+                );
+        minioStorageService.deletePlayListImage(playList.getImageKey());
         playListRepository.deleteById(id);
     }
 }

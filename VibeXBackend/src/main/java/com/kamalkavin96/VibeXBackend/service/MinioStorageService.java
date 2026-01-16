@@ -43,37 +43,99 @@ public class MinioStorageService {
         }
     }
 
-    private String getExtension(String filename) {
-        if (filename == null || !filename.contains(".")) return "";
-        return filename.substring(filename.lastIndexOf("."));
+    public void deletePlayListImage(String fileKey) {
+        try {
+            minioClient.removeObject(
+                    RemoveObjectArgs.builder()
+                            .bucket(properties.getBuckets().get("playlist-images"))
+                            .object(fileKey)
+                            .build()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete play list image: " + fileKey, e);
+        }
     }
 
-    public InputStream getPlaylistImageStream(String imageKey) {
+
+    public String uploadFile(MultipartFile file, String bucketKey, String folderName){
+        try {
+            String extension = getExtension(file.getOriginalFilename());
+            String objectKey =  UUID.randomUUID() + extension;
+            String folderObjectKey = folderName +"/" + objectKey;
+
+            minioClient.putObject(
+                    PutObjectArgs.builder()
+                            .bucket(properties.getBuckets().get(bucketKey))
+                            .object(folderObjectKey)
+                            .stream(file.getInputStream(), file.getSize(),-1)
+                            .contentType(file.getContentType())
+                            .build()
+            );
+            return objectKey;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public InputStream getFile(String fileKey, String bucketKey, String folderName) {
         try {
             return minioClient.getObject(
                     GetObjectArgs.builder()
-                            .bucket(properties.getBuckets().get("playlist-images"))
-                            .object(imageKey)
+                            .bucket(properties.getBuckets().get(bucketKey))
+                            .object(folderName+"/"+fileKey)
                             .build()
             );
         } catch (Exception e) {
-            throw new RuntimeException("Failed to fetch playlist image", e);
+            throw new RuntimeException("Failed to fetch file: " + fileKey, e);
         }
     }
 
-    public String getPlaylistImagePresignedUrl(String imageKey) {
+
+    public void deleteFile(String fileKey, String bucketKey, String folderName) {
         try {
-            return minioClient.getPresignedObjectUrl(
-                    GetPresignedObjectUrlArgs.builder()
-                            .method(Method.GET)
-                            .bucket(properties.getBuckets().get("playlist-images"))
-                            .object(imageKey)
-                            .expiry(60 * 60) // 1 hour
+            minioClient.removeObject(
+                    RemoveObjectArgs.builder()
+                            .bucket(properties.getBuckets().get(bucketKey))
+                            .object(folderName+"/"+fileKey)
                             .build()
             );
         } catch (Exception e) {
-            throw new RuntimeException("Failed to generate image URL", e);
+            throw new RuntimeException("Failed to delete song file: " + fileKey, e);
         }
+    }
+
+    public InputStream getSongStream(String songKey, long offset, long length) {
+        try {
+            return minioClient.getObject(
+                    GetObjectArgs.builder()
+                            .bucket(properties.getBuckets().get("song-files"))
+                            .object("songs/"+songKey)
+                            .offset(offset)
+                            .length(length)
+                            .build()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch song chunk", e);
+        }
+    }
+
+    public StatObjectResponse getFileStat(String thumbnailKey, String bucketKey, String folderName) {
+        try {
+            return minioClient.statObject(
+                    StatObjectArgs.builder()
+                            .bucket(properties.getBuckets().get(bucketKey))
+                            .object(folderName+"/" + thumbnailKey)
+                            .build()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to stat file", e);
+        }
+    }
+
+
+    private String getExtension(String filename) {
+        if (filename == null || !filename.contains(".")) return "";
+        return filename.substring(filename.lastIndexOf("."));
     }
 
     public InputStream getObject(String bucket, String objectKey) {

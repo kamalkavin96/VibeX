@@ -6,14 +6,7 @@ import lombok.Data;
 public class SongCreateRequest {
 
     private String title;
-    private Long albumId;
-    private Long labelId;
-    private Long languageId;
-
-    private Long[] singerIds;
-    private Long[] lyricistIds;
-    private Long[] musicianIds;
-    private Long[] directorIds;
-    private Long[] castIds;
+    private String albumName;
+    private String singerName;
 
 }

@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 
-import { deleteSong, getAllSongs, uploadSong } from "../../services/songService";
+import {
+  deleteSong,
+  getAllSongs,
+  uploadSong,
+} from "../../services/songService";
 import SongUploadModal from "../../components/song/SongUploadModal";
 import SongCard from "../../components/song/SongCard";
+import SongDeleteModal from "../../components/song/SongDeleteModal";
 
 export default function SongsView() {
   const [songs, setSongs] = useState([]);
@@ -17,13 +22,15 @@ export default function SongsView() {
   };
 
   useEffect(() => {
-    fetchSongs();
+    const fetchSongsWrapper = async () => {
+      await fetchSongs();
+    };
+    fetchSongsWrapper();
   }, []);
 
   return (
     <main className="pt-12 lg:pl-64 min-h-screen bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-gray-100">
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-8">
-
         {/* HEADER */}
         <header className="flex items-center justify-between">
           <div>
@@ -42,7 +49,15 @@ export default function SongsView() {
         </header>
 
         {/* SONG GRID */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        <section
+          className="
+            grid
+            grid-cols-1
+            sm:grid-cols-2
+            lg:grid-cols-3      
+            gap-4
+          "
+        >
           {songs.map((song) => (
             <SongCard
               key={song.id}

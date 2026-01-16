@@ -7,9 +7,9 @@ export default function Header({ setOpen, dark, setDark }) {
       className="
         fixed top-0 left-0 right-0
         h-12
-        bg-white/80 dark:bg-zinc-900/80
+        bg-white/80 dark:bg-zinc-800
         backdrop-blur
-        border-b border-gray-200/70 dark:border-zinc-800
+        border-b border-gray-200/70 dark:border-zinc-900
         flex items-center justify-between
         px-4 z-40
       "

@@ -1,3 +1,4 @@
+import { TbPlayerPlay } from "react-icons/tb";
 import { Link } from "react-router";
 
 export default function SideDrawer({ open, setOpen }) {
@@ -10,8 +11,8 @@ export default function SideDrawer({ open, setOpen }) {
       className={`
         fixed top-12 left-0 w-64
         h-[calc(100vh-3rem)]
-        bg-white dark:bg-zinc-900
-        border-r border-gray-200 dark:border-zinc-800
+        bg-white dark:bg-zinc-800
+        border-r border-gray-200 dark:border-zinc-900
         z-40 transform transition-transform duration-300
         ${open ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0
@@ -23,21 +24,25 @@ export default function SideDrawer({ open, setOpen }) {
           <NavItem icon={<HomeIcon />} label="Home" onClick={closeDrawer} />
         </Link>
 
-        <Link to="/playlist">
+        {/* <Link to="/playlist">
           <NavItem icon={<PlaylistIcon />} label="Playlists" onClick={closeDrawer} />
-        </Link>
+        </Link> */}
 
-        <Link to="/dashboard">
+        {/* <Link to="/dashboard">
           <NavItem icon={<DashboardIcon />} label="Dashboard" onClick={closeDrawer} />
-        </Link>
+        </Link> */}
 
         <Link to="/songs">
           <NavItem icon={<DashboardIcon />} label="Songs" onClick={closeDrawer} />
         </Link>
 
+        <Link to="/song-player">
+          <NavItem icon={<TbPlayerPlay />} label="Song Player" onClick={closeDrawer} />
+        </Link>
+
         
-        <NavItem icon={<HeartIcon />} label="Liked Songs" onClick={closeDrawer} />
-        <NavItem icon={<RecentPlayedIcon />} label="Recently Played" onClick={closeDrawer} />
+        {/* <NavItem icon={<HeartIcon />} label="Liked Songs" onClick={closeDrawer} />
+        <NavItem icon={<RecentPlayedIcon />} label="Recently Played" onClick={closeDrawer} /> */}
 
         <div className="mt-3 border-t border-gray-200 dark:border-zinc-800 pt-3">
 
