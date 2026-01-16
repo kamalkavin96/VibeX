@@ -10,12 +10,14 @@ export default function SideDrawer({ open, setOpen }) {
     <aside
       className={`
         fixed top-12 left-0 w-64
-        h-[calc(100vh-3rem)]
+        h-[calc(100vh-3.5rem)]
         bg-white dark:bg-zinc-800
         border-r border-gray-200 dark:border-zinc-900
         z-40 transform transition-transform duration-300
         ${open ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0
+        rounded-2xl
+        my-1
       `}
     >
       <nav className="p-3 text-sm font-medium space-y-1">

@@ -30,204 +30,182 @@ function SongPlayerCard({
   return (
     <div
       className="
-      h-full
-      bg-zinc-50 dark:bg-zinc-800
-      p-6
-      shadow-lg
-      flex flex-col
-      justify-center items-center
-      text-center
-      transition-[background]
-      duration-300
-      rounded-2xl
-    "
+        h-full
+        rounded-2xl
+        bg-white/10 dark:bg-black/20
+        border border-white/10
+        shadow-xl
+        flex items-center justify-center
+        p-6
+      "
     >
-      {song ? (
-        <>
-          <div className="w-50 h-50 rounded-lg mb-8">
-            {song.thumbnailKey ? (
-              <img
-                src={`${API_BASE_URL}/api/songs/thumbnail/${song.thumbnailKey}`}
-                alt="Playlist cover"
-                className="h-full w-full object-cover rounded-2xl"
-              />
-            ) : (
-              <div className={`h-full w-full bg-linear-to-br`} />
-            )}
-          </div>
-
-          <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-1">
-            {song.title}
-          </h2>
-          <p className="text-zinc-500 dark:text-zinc-400 text-sm">
-            {song.albumName}
-          </p>
-
-          {/* PROGRESS */}
-          <div className="w-full mt-2 group">
-            <div className="flex justify-between text-xs text-zinc-500 mb-1">
-              <span>{format(progress)}</span>
-              <span>{format(duration)}</span>
+      {/* CONTENT WRAPPER (FIXES ALIGNMENT) */}
+      <div className="w-full max-w-md flex flex-col items-center text-center">
+        {song ? (
+          <>
+            {/* ALBUM ART */}
+            <div className="w-56 h-56 rounded-2xl mb-6 overflow-hidden shadow-2xl">
+              {song.thumbnailKey ? (
+                <img
+                  src={`${API_BASE_URL}/api/songs/thumbnail/${song.thumbnailKey}`}
+                  alt="Playlist cover"
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="h-full w-full bg-linear-to-br from-emerald-500 to-teal-500" />
+              )}
             </div>
 
-            <input
-              type="range"
-              min="0"
-              max={duration || 0}
-              value={progress}
-              onChange={onSeek}
-              style={{
-                backgroundImage:
-                  "linear-gradient(90deg, #34d399, #10b981, #059669)",
-                backgroundSize: `${(progress / (duration || 1)) * 100}% 100%`,
-                backgroundRepeat: "no-repeat",
-              }}
-              className="
-                w-full
-                h-1.5
-                appearance-none
-                rounded-full
-                cursor-pointer
-                bg-zinc-200 dark:bg-zinc-700
-                transition-[background-size]
-                duration-150
+            {/* TITLE */}
+            <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+              {song.title}
+            </h2>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-4">
+              {song.albumName}
+            </p>
 
-                /* TRACK */
-                [&::-webkit-slider-runnable-track]:h-1.5
-                [&::-webkit-slider-runnable-track]:rounded-full
+            {/* PROGRESS */}
+            <div className="w-full group">
+              <div className="flex justify-between text-xs text-zinc-500 mb-1">
+                <span>{format(progress)}</span>
+                <span>{format(duration)}</span>
+              </div>
 
-                /* DOT */
-                [&::-webkit-slider-thumb]:appearance-none
-                [&::-webkit-slider-thumb]:h-4
-                [&::-webkit-slider-thumb]:w-4
-                [&::-webkit-slider-thumb]:rounded-full
-                [&::-webkit-slider-thumb]:bg-emerald-500
-                [&::-webkit-slider-thumb]:transition-all
-                [&::-webkit-slider-thumb]:duration-200
-                [&::-webkit-slider-thumb]:-mt-1.25
-
-                /* RIPPLE */
-                [&::-webkit-slider-thumb]:shadow-[0_0_0_0_rgba(16,185,129,0.35)]
-                group-hover:[&::-webkit-slider-thumb]:shadow-[0_0_0_6px_rgba(16,185,129,0.25)]
-
-                /* ACTIVE */
-                active:[&::-webkit-slider-thumb]:scale-110
-                active:[&::-webkit-slider-thumb]:shadow-[0_0_0_10px_rgba(16,185,129,0.25)]
-              "
-            />
-          </div>
-
-          {/* CONTROLS */}
-          <div className="flex justify-center items-center gap-6 mt-8">
-            <PrevButton onClick={onPrev} />
-            {isPlaying ? (
-              <PauseButton onClick={() => setIsPlaying(false)} />
-            ) : (
-              <PlayButton onClick={() => setIsPlaying(true)} />
-            )}
-            <NextButton onClick={onNext} />
-          </div>
-
-          {/* More options */}
-          <div className="w-full mt-4 flex justify-center items-center">
-            {/* VOLUME */}
-            <div
-              className="
-              group flex items-center gap-3
-              w-1/2 max-w-xs
-              bg-zinc-50/30 dark:bg-zinc-900/60
-              rounded-2xl p-3
-            "
-            >
-              <FaVolumeHigh size={22} />
-              {/* SUBTRACT */}
-              <button
-                onClick={() =>
-                  onVolumeChange({
-                    target: { value: Math.max(0, +(volume - 0.05).toFixed(2)) },
-                  })
-                }
-                className="
-                  w-8 h-8 rounded-full
-                  bg-zinc-200 dark:bg-zinc-700
-                  text-zinc-700 dark:text-zinc-200
-                  hover:scale-110 transition
-                  flex items-center justify-center
-                "
-              >
-                <GrFormSubtract size={18} />
-              </button>
-
-              {/* SLIDER */}
               <input
                 type="range"
                 min="0"
-                max="1"
-                step="0.01"
-                value={volume}
-                onChange={onVolumeChange}
+                max={duration || 0}
+                value={progress}
+                onChange={onSeek}
                 style={{
                   backgroundImage:
-                    "linear-gradient(90deg, #34d399, #10b981, #059669)",
-                  backgroundSize: `${volume * 100}% 100%`,
+                    "linear-gradient(90deg,#34d399,#10b981,#059669)",
+                  backgroundSize: `${(progress / (duration || 1)) * 100}% 100%`,
                   backgroundRepeat: "no-repeat",
                 }}
                 className="
-                  flex-1
-                  h-1.5
-                  appearance-none
-                  rounded-full
-                  cursor-pointer
-                  bg-zinc-200 dark:bg-zinc-700
-                  transition-[background-size]
-                  duration-150
+                    w-full
+                    h-1.5
+                    appearance-none
+                    rounded-full
+                    cursor-pointer
+                    bg-zinc-200 dark:bg-zinc-700
 
-                  /* TRACK */
-                  [&::-webkit-slider-runnable-track]:h-1.5
-                  [&::-webkit-slider-runnable-track]:rounded-full
+                    /* TRACK */
+                    [&::-webkit-slider-runnable-track]:h-1.5
+                    [&::-webkit-slider-runnable-track]:rounded-full
 
-                  /* DOT */
-                  [&::-webkit-slider-thumb]:appearance-none
-                  [&::-webkit-slider-thumb]:h-4
-                  [&::-webkit-slider-thumb]:w-4
-                  [&::-webkit-slider-thumb]:rounded-full
-                  [&::-webkit-slider-thumb]:bg-emerald-500
-                  [&::-webkit-slider-thumb]:transition-all
-                  [&::-webkit-slider-thumb]:duration-200
-                  [&::-webkit-slider-thumb]:-mt-1.25
+                    /* THUMB (DOT) */
+                    [&::-webkit-slider-thumb]:appearance-none
+                    [&::-webkit-slider-thumb]:h-4
+                    [&::-webkit-slider-thumb]:w-4
+                    [&::-webkit-slider-thumb]:rounded-full
+                    [&::-webkit-slider-thumb]:bg-emerald-500
+                    [&::-webkit-slider-thumb]:-mt-1.25
+                    [&::-webkit-slider-thumb]:shadow-md
+                    [&::-webkit-slider-thumb]:transition-all
 
-                  /* HOVER */
-                  [&::-webkit-slider-thumb]:opacity-70
-                  group-hover:[&::-webkit-slider-thumb]:opacity-100
+                    /* HOVER */
+                    hover:[&::-webkit-slider-thumb]:scale-110
 
-                  /* ACTIVE */
-                  active:[&::-webkit-slider-thumb]:scale-110
-                "
+                    /* ACTIVE */
+                    active:[&::-webkit-slider-thumb]:scale-125
+                    active:[&::-webkit-slider-thumb]:shadow-[0_0_0_8px_rgba(16,185,129,0.35)]
+                  "
               />
-
-              {/* ADD */}
-              <button
-                onClick={() =>
-                  onVolumeChange({
-                    target: { value: Math.min(1, +(volume + 0.05).toFixed(2)) },
-                  })
-                }
-                className="
-                  w-8 h-8 rounded-full
-                  bg-zinc-200 dark:bg-zinc-700
-                  text-zinc-700 dark:text-zinc-200
-                  hover:scale-110 transition
-                  flex items-center justify-center
-                "
-              >
-                <IoMdAdd size={18} />
-              </button>
             </div>
-          </div>
-        </>
-      ) : (
-        <p className="text-zinc-500">Select a song</p>
-      )}
+
+            {/* CONTROLS */}
+            <div className="flex items-center gap-6 mt-8">
+              <PrevButton onClick={onPrev} />
+              {isPlaying ? (
+                <PauseButton onClick={() => setIsPlaying(false)} />
+              ) : (
+                <PlayButton onClick={() => setIsPlaying(true)} />
+              )}
+              <NextButton onClick={onNext} />
+            </div>
+
+            {/* VOLUME */}
+            <div className="w-full flex justify-center mt-6">
+              <div className="flex items-center gap-3 w-full max-w-xs bg-zinc-50/30 dark:bg-zinc-900/60 rounded-2xl p-3">
+                <FaVolumeHigh size={20} />
+
+                <button
+                  onClick={() =>
+                    onVolumeChange({
+                      target: {
+                        value: Math.max(0, +(volume - 0.05).toFixed(2)),
+                      },
+                    })
+                  }
+                  className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center"
+                >
+                  <GrFormSubtract />
+                </button>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  value={volume}
+                  onChange={onVolumeChange}
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(90deg,#34d399,#10b981,#059669)",
+                    backgroundSize: `${volume * 100}% 100%`,
+                    backgroundRepeat: "no-repeat",
+                  }}
+                  className="
+                    flex-1
+                    h-1.5
+                    appearance-none
+                    rounded-full
+                    cursor-pointer
+                    bg-zinc-200 dark:bg-zinc-700
+
+                    /* TRACK */
+                    [&::-webkit-slider-runnable-track]:h-1.5
+                    [&::-webkit-slider-runnable-track]:rounded-full
+
+                    /* DOT (THUMB) */
+                    [&::-webkit-slider-thumb]:appearance-none
+                    [&::-webkit-slider-thumb]:h-4
+                    [&::-webkit-slider-thumb]:w-4
+                    [&::-webkit-slider-thumb]:rounded-full
+                     [&::-webkit-slider-thumb]:bg-emerald-500
+                    [&::-webkit-slider-thumb]:-mt-1.25
+                    [&::-webkit-slider-thumb]:shadow-md
+                    [&::-webkit-slider-thumb]:transition-all
+
+                    /* HOVER */
+                    hover:[&::-webkit-slider-thumb]:scale-110
+
+                    /* ACTIVE */
+                    active:[&::-webkit-slider-thumb]:scale-125
+                    active:[&::-webkit-slider-thumb]:shadow-[0_0_0_8px_rgba(16,185,129,0.35)]
+                  "
+                />
+
+                <button
+                  onClick={() =>
+                    onVolumeChange({
+                      target: {
+                        value: Math.min(1, +(volume + 0.05).toFixed(2)),
+                      },
+                    })
+                  }
+                  className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center"
+                >
+                  <IoMdAdd />
+                </button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <p className="text-zinc-500">Select a song</p>
+        )}
+      </div>
     </div>
   );
 }
@@ -235,7 +213,7 @@ function SongPlayerCard({
 /* ================= SONG LIST ================= */
 function SongListCard({ songs, currentSong, onSelect }) {
   return (
-    <div className="h-full bg-white dark:bg-zinc-800 shadow-lg flex flex-col transition-[background] duration-300 rounded-2xl">
+    <div className="h-full bg-white/10 dark:bg-zinc-800 shadow-lg flex flex-col transition-[background] duration-300 rounded-2xl">
       <div className="p-4 border-b border-zinc-200 dark:border-zinc-900">
         <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
           Song List
@@ -357,7 +335,7 @@ function SongPlayer2() {
 
   return (
     <MainContent>
-      <div className="h-[calc(100vh-3rem)] w-full p-4 bg-linear-to-br from-zinc-100 to-zinc-200 dark:from-zinc-950 dark:to-zinc-900">
+      <div className="h-[calc(100vh-3.5rem)] w-full m-1">
         {currentSong && (
           <audio
             ref={audioRef}
@@ -369,7 +347,7 @@ function SongPlayer2() {
           />
         )}
 
-        <div className="h-full flex gap-4">
+        <div className="h-full flex gap-1">
           <div className="flex-1 h-full">
             <SongPlayerCard
               song={currentSong}
