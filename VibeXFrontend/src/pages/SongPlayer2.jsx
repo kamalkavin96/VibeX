@@ -36,11 +36,14 @@ function SongPlayerCard({
         border border-white/10
         shadow-xl
         flex items-center justify-center
-        p-6
+        p-4
+        bg-linear-to-br dark:from-emerald-600 dark:via-teal-600 dark:to-cyan-600 text-white
+
+
       "
     >
       {/* CONTENT WRAPPER (FIXES ALIGNMENT) */}
-      <div className="w-full max-w-md flex flex-col items-center text-center">
+      <div className="w-full flex flex-col items-center text-center bg-zinc-900/20 p-6 rounded-2xl">
         {song ? (
           <>
             {/* ALBUM ART */}
