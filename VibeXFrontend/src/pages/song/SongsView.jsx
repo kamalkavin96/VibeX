@@ -4,11 +4,13 @@ import {
   deleteSong,
   getAllSongs,
   uploadSong,
+  updateSong,
 } from "../../services/songService";
 import SongUploadModal from "../../components/song/SongUploadModal";
 import SongCard from "../../components/song/SongCard";
 import SongDeleteModal from "../../components/song/SongDeleteModal";
 import MainContent from "../../components/MainContent";
+import SongEditModal from "../../components/song/SongEditModal";
 
 export default function SongsView() {
   const [songs, setSongs] = useState([]);
@@ -16,6 +18,8 @@ export default function SongsView() {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [deleteName, setDeleteName] = useState("");
+  const [editSong, setEditSong] = useState(null);
+  const [editOpen, setEditOpen] = useState(false);
 
   const fetchSongs = async () => {
     const res = await getAllSongs();
@@ -69,6 +73,10 @@ export default function SongsView() {
                   setDeleteName(song.title);
                   setDeleteOpen(true);
                 }}
+                onEdit={()=>{
+                  setEditOpen(true);
+                  setEditSong(song);
+                }}
               />
             ))}
           </section>
@@ -97,6 +105,20 @@ export default function SongsView() {
               }}
             />
           )}
+
+          {/* EDIT */}
+          {editOpen && (
+            <SongEditModal
+              song={editSong}
+              onClose={()=>setEditOpen(false)}
+              onEdit={async (payload) => {
+                await updateSong(payload);
+                await fetchSongs();
+                setEditOpen(false);
+              }}
+            />
+          )}
+
         </div>
       </div>
     </MainContent>

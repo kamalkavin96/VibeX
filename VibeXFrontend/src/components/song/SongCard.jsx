@@ -1,7 +1,8 @@
 import { Trash2, Music } from "lucide-react";
 import { API_BASE_URL } from "../../config/apiConfig";
+import { FaEdit } from "react-icons/fa";
 
-export default function SongCard({ song, onDelete }) {
+export default function SongCard({ song, onDelete, onEdit }) {
   return (
     <div
       className="
@@ -48,7 +49,7 @@ export default function SongCard({ song, onDelete }) {
       >
         {song.thumbnailKey ? (
           <img
-            src={`${API_BASE_URL}/api/songs/thumbnail/${song.thumbnailKey}`}
+            src={`${API_BASE_URL}/api/songs/thumbnail/${song.thumbnailKey}?v=${song.updatedAt}`}
             alt="Album cover"
             className="
               w-full h-full object-cover
@@ -113,6 +114,23 @@ export default function SongCard({ song, onDelete }) {
       >
         <Trash2 size={16} className="text-red-500" />
       </button>
+
+      {/* EDIT */}
+      <button
+        onClick={onEdit}
+        aria-label="Delete song"
+        className="
+          absolute top-10 right-3
+          opacity-0 group-hover:opacity-100
+          scale-90 group-hover:scale-100
+          transition
+          rounded-full p-1.5
+          bg-red-500/10 hover:bg-red-500/20
+        "
+      >
+        <FaEdit size={16} className="text-yellow-500" />
+      </button>
+
     </div>
   );
 }

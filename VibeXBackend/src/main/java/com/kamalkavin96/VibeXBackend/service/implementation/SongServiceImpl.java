@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -68,13 +69,29 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
-    public SongResponse update(UUID id, SongUpdateRequest request) {
-        Song song = songRepository.findById(id)
+    @Transactional
+    public SongResponse update(
+            SongUpdateRequest request,
+            MultipartFile thumbnailFile
+    ) {
+        Song song = songRepository.findById(request.getId())
                 .orElseThrow(() -> new RuntimeException("Song not found"));
 
         song.setTitle(request.getTitle());
         song.setAlbumName(request.getAlbumName());
         song.setSingerName(request.getSingerName());
+        song.setUpdatedAt(Instant.now());
+
+        if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
+            System.out.println("Replacing.....");
+            minioStorageService.replaceFile(
+                    thumbnailFile,
+                    "song-files",
+                    "thumbnails",
+                    song.getThumbnailKey()
+            );
+        }
+
         return SongMapper.toResponse(songRepository.save(song));
     }
 

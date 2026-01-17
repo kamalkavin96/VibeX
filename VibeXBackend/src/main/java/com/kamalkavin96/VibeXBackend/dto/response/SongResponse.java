@@ -16,5 +16,6 @@ public class SongResponse {
     private String thumbnailKey;
 
     private Instant createdAt;
+    private Instant updatedAt;
 
 }

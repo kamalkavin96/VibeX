@@ -1,6 +1,7 @@
 package com.kamalkavin96.VibeXBackend.controller;
 
 import com.kamalkavin96.VibeXBackend.dto.request.SongCreateRequest;
+import com.kamalkavin96.VibeXBackend.dto.request.SongUpdateRequest;
 import com.kamalkavin96.VibeXBackend.dto.response.SongResponse;
 import com.kamalkavin96.VibeXBackend.service.SongService;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +55,29 @@ public class SongController {
 //            @RequestBody SongUpdateRequest request
 //    ) {
 //        return ResponseEntity.ok(songService.update(id, request));
+//
 //    }
+
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<SongResponse> update(
+            @RequestParam UUID id,
+            @RequestParam String title,
+            @RequestParam String albumName,
+            @RequestParam String singerName,
+
+            @RequestPart(value = "thumbnailFile", required = false)
+            MultipartFile thumbnailFile
+    ) {
+        SongUpdateRequest request = new SongUpdateRequest();
+        request.setId(id);
+        request.setTitle(title);
+        request.setAlbumName(albumName);
+        request.setSingerName(singerName);
+
+        return ResponseEntity.ok(songService.update(request, thumbnailFile));
+    }
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {

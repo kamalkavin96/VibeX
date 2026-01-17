@@ -26,9 +26,9 @@ export default function SideDrawer({ open, setOpen }) {
           <NavItem icon={<HomeIcon />} label="Home" onClick={closeDrawer} />
         </Link>
 
-        {/* <Link to="/playlist">
+        <Link to="/playlist">
           <NavItem icon={<PlaylistIcon />} label="Playlists" onClick={closeDrawer} />
-        </Link> */}
+        </Link>
 
         {/* <Link to="/dashboard">
           <NavItem icon={<DashboardIcon />} label="Dashboard" onClick={closeDrawer} />

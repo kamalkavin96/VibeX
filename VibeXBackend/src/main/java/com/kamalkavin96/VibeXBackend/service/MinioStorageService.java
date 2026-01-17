@@ -56,7 +56,6 @@ public class MinioStorageService {
         }
     }
 
-
     public String uploadFile(MultipartFile file, String bucketKey, String folderName){
         try {
             String extension = getExtension(file.getOriginalFilename());
@@ -89,7 +88,6 @@ public class MinioStorageService {
             throw new RuntimeException("Failed to fetch file: " + fileKey, e);
         }
     }
-
 
     public void deleteFile(String fileKey, String bucketKey, String folderName) {
         try {
@@ -132,6 +130,20 @@ public class MinioStorageService {
         }
     }
 
+    public void replaceFile(MultipartFile file, String bucketKey, String folderName, String existingKey) {
+        try {
+            minioClient.putObject(
+                    PutObjectArgs.builder()
+                            .bucket(properties.getBuckets().get(bucketKey))
+                            .object(folderName + "/" + existingKey)
+                            .stream(file.getInputStream(), file.getSize(), -1)
+                            .contentType(file.getContentType())
+                            .build()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to replace file: " + existingKey, e);
+        }
+    }
 
     private String getExtension(String filename) {
         if (filename == null || !filename.contains(".")) return "";

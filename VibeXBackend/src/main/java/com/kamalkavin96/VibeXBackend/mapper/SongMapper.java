@@ -23,6 +23,7 @@ public class SongMapper {
         res.setSongKey(song.getSongKey());
         res.setThumbnailKey(song.getThumbnailKey());
         res.setCreatedAt(song.getCreatedAt());
+        res.setUpdatedAt(song.getUpdatedAt());
         return res;
     }
 }

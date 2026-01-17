@@ -53,3 +53,36 @@ export const deleteSong = async (id) => {
   }
 };
 
+/* ---------------- UPDATE (SWAGGER-COMPATIBLE) ---------------- */
+export const updateSong = async ({
+  id,
+  title,
+  albumName,
+  singerName,
+  thumbnailFile, // REQUIRED (as per swagger usage)
+}) => {
+  const toastId = notifyLoading("Updating song...");
+
+  try {
+    const formData = new FormData();
+
+    // ONLY file goes in multipart body
+    formData.append("thumbnailFile", thumbnailFile);
+
+    const res = await api.put("/api/songs", formData, {
+      params: {
+        id,
+        title,
+        albumName,
+        singerName,
+      },
+      // ❌ DO NOT set Content-Type
+    });
+
+    updateToast(toastId, "success", "Song updated successfully ✨");
+    return res.data;
+  } catch (err) {
+    updateToast(toastId, "error", "Failed to update song");
+    throw err;
+  }
+};

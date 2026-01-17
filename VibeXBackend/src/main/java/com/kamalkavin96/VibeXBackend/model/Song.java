@@ -33,11 +33,18 @@ public class Song {
     private String thumbnailKey;
     @Column(nullable = false, updatable = false)
     private Instant createdAt = Instant.now();
+    @Column(nullable = false)
+    private Instant updatedAt = Instant.now();
 
     @PrePersist
     public void prePersist() {
         if (id == null) {
             id = UUID.randomUUID();
         }
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = Instant.now();
     }
 }

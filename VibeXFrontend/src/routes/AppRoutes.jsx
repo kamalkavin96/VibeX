@@ -7,7 +7,6 @@ import AppLayout from "../layouts/AppLayout";
 import SongsView from "../pages/song/SongsView";
 import AdminPage from "../pages/adminPages/AdminPage";
 import BucketManager from "../pages/adminPages/BucketManager";
-import SongPlayer from "../pages/SongPlayer";
 import SongPlayer2 from "../pages/SongPlayer2";
 
 export default function AppRoutes() {

@@ -28,47 +28,46 @@ function SongPlayerCard({
       .padStart(2, "0")}`;
 
   return (
-    <div
-      className="
-        h-full
-        rounded-2xl
-        bg-white/10 dark:bg-black/20
-        border border-white/10
-        shadow-xl
-        flex items-center justify-center
-        p-4
-        bg-linear-to-br dark:from-emerald-600 dark:via-teal-600 dark:to-cyan-600 text-white
-
-
-      "
-    >
-      {/* CONTENT WRAPPER (FIXES ALIGNMENT) */}
-      <div className="w-full flex flex-col items-center text-center bg-zinc-900/20 p-6 rounded-2xl">
+    <div className="h-full flex items-center justify-center p-4">
+      <div
+        className="
+          w-full max-w-md
+          rounded-3xl
+          bg-white/70 dark:bg-zinc-900/70
+          backdrop-blur-xl
+          border border-zinc-200 dark:border-zinc-800
+          shadow-2xl
+          p-6
+          flex flex-col items-center
+        "
+      >
         {song ? (
           <>
             {/* ALBUM ART */}
-            <div className="w-56 h-56 rounded-2xl mb-6 overflow-hidden shadow-2xl">
+            <div className="w-64 h-64 rounded-2xl overflow-hidden shadow-xl mb-6">
               {song.thumbnailKey ? (
                 <img
-                  src={`${API_BASE_URL}/api/songs/thumbnail/${song.thumbnailKey}`}
-                  alt="Playlist cover"
-                  className="h-full w-full object-cover"
+                  src={`${API_BASE_URL}/api/songs/thumbnail/${song.thumbnailKey}?v=${song.updatedAt}`}
+                  alt="Album Art"
+                  className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="h-full w-full bg-linear-to-br from-emerald-500 to-teal-500" />
+                <div className="w-full h-full bg-linear-to-br from-emerald-500 to-teal-500" />
               )}
             </div>
 
-            {/* TITLE */}
-            <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-              {song.title}
-            </h2>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-4">
-              {song.albumName}
-            </p>
+            {/* SONG INFO */}
+            <div className="text-center mb-4">
+              <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100 truncate">
+                {song.title}
+              </h2>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 truncate">
+                {song.albumName}
+              </p>
+            </div>
 
             {/* PROGRESS */}
-            <div className="w-full group">
+            <div className="w-full mb-6">
               <div className="flex justify-between text-xs text-zinc-500 mb-1">
                 <span>{format(progress)}</span>
                 <span>{format(duration)}</span>
@@ -87,39 +86,37 @@ function SongPlayerCard({
                   backgroundRepeat: "no-repeat",
                 }}
                 className="
-                    w-full
-                    h-1.5
-                    appearance-none
-                    rounded-full
-                    cursor-pointer
-                    bg-zinc-200 dark:bg-zinc-700
+                  w-full
+                  h-1.5
+                  appearance-none
+                  rounded-full
+                  cursor-pointer
+                  bg-zinc-200 dark:bg-zinc-700
 
-                    /* TRACK */
-                    [&::-webkit-slider-runnable-track]:h-1.5
-                    [&::-webkit-slider-runnable-track]:rounded-full
+                  /* TRACK */
+                  [&::-webkit-slider-runnable-track]:h-1.5
+                  [&::-webkit-slider-runnable-track]:rounded-full
 
-                    /* THUMB (DOT) */
-                    [&::-webkit-slider-thumb]:appearance-none
-                    [&::-webkit-slider-thumb]:h-4
-                    [&::-webkit-slider-thumb]:w-4
-                    [&::-webkit-slider-thumb]:rounded-full
-                    [&::-webkit-slider-thumb]:bg-emerald-500
-                    [&::-webkit-slider-thumb]:-mt-1.25
-                    [&::-webkit-slider-thumb]:shadow-md
-                    [&::-webkit-slider-thumb]:transition-all
+                  /* THUMB */
+                  [&::-webkit-slider-thumb]:appearance-none
+                  [&::-webkit-slider-thumb]:h-4
+                  [&::-webkit-slider-thumb]:w-4
+                  [&::-webkit-slider-thumb]:rounded-full
+                  [&::-webkit-slider-thumb]:bg-emerald-500
+                  [&::-webkit-slider-thumb]:shadow-md
+                  [&::-webkit-slider-thumb]:-mt-1.25
 
-                    /* HOVER */
-                    hover:[&::-webkit-slider-thumb]:scale-110
-
-                    /* ACTIVE */
-                    active:[&::-webkit-slider-thumb]:scale-125
-                    active:[&::-webkit-slider-thumb]:shadow-[0_0_0_8px_rgba(16,185,129,0.35)]
-                  "
+                  /* FIREFOX */
+                  [&::-moz-range-thumb]:h-4
+                  [&::-moz-range-thumb]:w-4
+                  [&::-moz-range-thumb]:rounded-full
+                  [&::-moz-range-thumb]:bg-emerald-500
+                "
               />
             </div>
 
             {/* CONTROLS */}
-            <div className="flex items-center gap-6 mt-8">
+            <div className="flex items-center gap-6 mb-6">
               <PrevButton onClick={onPrev} />
               {isPlaying ? (
                 <PauseButton onClick={() => setIsPlaying(false)} />
@@ -130,83 +127,76 @@ function SongPlayerCard({
             </div>
 
             {/* VOLUME */}
-            <div className="w-full flex justify-center mt-6">
-              <div className="flex items-center gap-3 w-full max-w-xs bg-zinc-50/30 dark:bg-zinc-900/60 rounded-2xl p-3">
-                <FaVolumeHigh size={20} />
+            <div className="w-full flex items-center gap-3">
+              <FaVolumeHigh className="text-zinc-600 dark:text-zinc-300" />
 
-                <button
-                  onClick={() =>
-                    onVolumeChange({
-                      target: {
-                        value: Math.max(0, +(volume - 0.05).toFixed(2)),
-                      },
-                    })
-                  }
-                  className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center"
-                >
-                  <GrFormSubtract />
-                </button>
-                <input
-                  type="range"
-                  min="0"
-                  max="1"
-                  step="0.01"
-                  value={volume}
-                  onChange={onVolumeChange}
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(90deg,#34d399,#10b981,#059669)",
-                    backgroundSize: `${volume * 100}% 100%`,
-                    backgroundRepeat: "no-repeat",
-                  }}
-                  className="
-                    flex-1
-                    h-1.5
-                    appearance-none
-                    rounded-full
-                    cursor-pointer
-                    bg-zinc-200 dark:bg-zinc-700
+              <button
+                onClick={() =>
+                  onVolumeChange({
+                    target: { value: Math.max(0, +(volume - 0.05).toFixed(2)) },
+                  })
+                }
+                className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center"
+              >
+                <GrFormSubtract />
+              </button>
 
-                    /* TRACK */
-                    [&::-webkit-slider-runnable-track]:h-1.5
-                    [&::-webkit-slider-runnable-track]:rounded-full
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={volume}
+                onChange={onVolumeChange}
+                style={{
+                  backgroundImage:
+                    "linear-gradient(90deg,#34d399,#10b981,#059669)",
+                  backgroundSize: `${volume * 100}% 100%`,
+                  backgroundRepeat: "no-repeat",
+                }}
+                className="
+                  flex-1
+                  h-1.5
+                  appearance-none
+                  rounded-full
+                  cursor-pointer
+                  bg-zinc-200 dark:bg-zinc-700
 
-                    /* DOT (THUMB) */
-                    [&::-webkit-slider-thumb]:appearance-none
-                    [&::-webkit-slider-thumb]:h-4
-                    [&::-webkit-slider-thumb]:w-4
-                    [&::-webkit-slider-thumb]:rounded-full
-                     [&::-webkit-slider-thumb]:bg-emerald-500
-                    [&::-webkit-slider-thumb]:-mt-1.25
-                    [&::-webkit-slider-thumb]:shadow-md
-                    [&::-webkit-slider-thumb]:transition-all
+                  /* TRACK */
+                  [&::-webkit-slider-runnable-track]:h-1.5
+                  [&::-webkit-slider-runnable-track]:rounded-full
 
-                    /* HOVER */
-                    hover:[&::-webkit-slider-thumb]:scale-110
+                  /* THUMB */
+                  [&::-webkit-slider-thumb]:appearance-none
+                  [&::-webkit-slider-thumb]:h-4
+                  [&::-webkit-slider-thumb]:w-4
+                  [&::-webkit-slider-thumb]:rounded-full
+                  [&::-webkit-slider-thumb]:bg-emerald-500
+                  [&::-webkit-slider-thumb]:shadow-md
+                  [&::-webkit-slider-thumb]:-mt-1.25
 
-                    /* ACTIVE */
-                    active:[&::-webkit-slider-thumb]:scale-125
-                    active:[&::-webkit-slider-thumb]:shadow-[0_0_0_8px_rgba(16,185,129,0.35)]
-                  "
-                />
+                  /* FIREFOX */
+                  [&::-moz-range-thumb]:h-4
+                  [&::-moz-range-thumb]:w-4
+                  [&::-moz-range-thumb]:rounded-full
+                  [&::-moz-range-thumb]:bg-emerald-500
+                "
+              />
 
-                <button
-                  onClick={() =>
-                    onVolumeChange({
-                      target: {
-                        value: Math.min(1, +(volume + 0.05).toFixed(2)),
-                      },
-                    })
-                  }
-                  className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center"
-                >
-                  <IoMdAdd />
-                </button>
-              </div>
+              <button
+                onClick={() =>
+                  onVolumeChange({
+                    target: { value: Math.min(1, +(volume + 0.05).toFixed(2)) },
+                  })
+                }
+                className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center"
+              >
+                <IoMdAdd />
+              </button>
             </div>
           </>
         ) : (
-          <p className="text-zinc-500">Select a song</p>
+          <p className="text-zinc-500 text-sm">Select a song 🎵</p>
         )}
       </div>
     </div>
@@ -216,7 +206,7 @@ function SongPlayerCard({
 /* ================= SONG LIST ================= */
 function SongListCard({ songs, currentSong, onSelect }) {
   return (
-    <div className="h-full bg-white/10 dark:bg-zinc-800 shadow-lg flex flex-col transition-[background] duration-300 rounded-2xl">
+    <div className="h-full bg-white dark:bg-zinc-900 shadow-lg flex flex-col transition-[background] duration-300 rounded-2xl">
       <div className="p-4 border-b border-zinc-200 dark:border-zinc-900">
         <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
           Song List
@@ -236,13 +226,13 @@ function SongListCard({ songs, currentSong, onSelect }) {
                 ${
                   active
                     ? "bg-emerald-500 text-white"
-                    : "bg-zinc-200 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 hover:bg-zinc-300 dark:hover:bg-zinc-700"
+                    : "bg-zinc-200 dark:bg-black text-zinc-800 dark:text-zinc-200 hover:bg-zinc-300 dark:hover:bg-zinc-700"
                 }`}
               >
                 <div className="h-14 w-14 mr-4">
                   {song.thumbnailKey ? (
                     <img
-                      src={`${API_BASE_URL}/api/songs/thumbnail/${song.thumbnailKey}`}
+                      src={`${API_BASE_URL}/api/songs/thumbnail/${song.thumbnailKey}?v=${song.updatedAt}`}
                       alt="Playlist cover"
                       className="object-cover rounded-lg"
                     />
