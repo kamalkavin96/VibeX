@@ -2,7 +2,7 @@ import { Trash2, Music } from "lucide-react";
 import { API_BASE_URL } from "../../config/apiConfig";
 import { FaEdit, FaPlay } from "react-icons/fa";
 
-export default function PlaylistCard({ playlist, onDelete, onEdit }) {
+export default function PlaylistCard({ playlist, onDelete, onEdit, onPlay }) {
   return (
     <div
       className="
@@ -128,8 +128,8 @@ export default function PlaylistCard({ playlist, onDelete, onEdit }) {
 
       {/* PLAY */}
       <button
-        // onClick={onEdit}
-        aria-label="Edit playlist"
+        onClick={()=>onPlay(playlist)}
+        aria-label="Play playlist"
         className="
           absolute top-17 right-3
           opacity-0 group-hover:opacity-100

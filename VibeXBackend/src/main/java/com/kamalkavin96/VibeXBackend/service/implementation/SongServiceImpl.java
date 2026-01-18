@@ -4,6 +4,7 @@ import com.kamalkavin96.VibeXBackend.dto.request.SongCreateRequest;
 import com.kamalkavin96.VibeXBackend.dto.request.SongUpdateRequest;
 import com.kamalkavin96.VibeXBackend.dto.response.SongResponse;
 import com.kamalkavin96.VibeXBackend.mapper.SongMapper;
+import com.kamalkavin96.VibeXBackend.model.PlayListSongs;
 import com.kamalkavin96.VibeXBackend.model.Song;
 import com.kamalkavin96.VibeXBackend.repository.SongRepository;
 import com.kamalkavin96.VibeXBackend.service.MinioStorageService;
@@ -30,6 +31,7 @@ public class SongServiceImpl implements SongService {
 
     private final SongRepository songRepository;
     private final MinioStorageService minioStorageService;
+    private final PlayListSongsServiceImpl playListSongsService;
 
 
     @Override
@@ -64,6 +66,16 @@ public class SongServiceImpl implements SongService {
     public List<SongResponse> getAll() {
         return songRepository.findAll()
                 .stream()
+                .map(SongMapper::toResponse)
+                .toList();
+    }
+
+    @Override
+    public List<SongResponse> getAllByPlayListId(UUID id) {
+        List<PlayListSongs> songsIdByPlayListId = playListSongsService.getSongsByPlaylist(id);
+        List<UUID> songIdList = songsIdByPlayListId.stream().map(PlayListSongs::getSongId).toList();
+        List<Song> songs = songRepository.findAllById(songIdList);
+        return songs.stream()
                 .map(SongMapper::toResponse)
                 .toList();
     }

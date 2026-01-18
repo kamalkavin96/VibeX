@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import MainContent from "../components/MainContent";
-import { getAllSongs } from "../services/songService";
+import { getAllSongs, getAllSongsByPlayListId } from "../services/songService";
 
 import { FaPause, FaPlay, FaVolumeUp } from "react-icons/fa";
 import { IoPlaySkipBackSharp, IoPlaySkipForward } from "react-icons/io5";
@@ -8,6 +8,7 @@ import { IoMdAdd } from "react-icons/io";
 import { GrFormSubtract, GrSubtract, GrSubtractCircle } from "react-icons/gr";
 import { FaVolumeHigh } from "react-icons/fa6";
 import { API_BASE_URL } from "../config/apiConfig";
+import { useParams } from "react-router";
 
 /* ================= PLAYER CARD ================= */
 function SongPlayerCard({
@@ -204,12 +205,12 @@ function SongPlayerCard({
 }
 
 /* ================= SONG LIST ================= */
-function SongListCard({ songs, currentSong, onSelect }) {
+function SongListCard({ songs, currentSong, onSelect, playlistName = null }) {
   return (
     <div className="h-full bg-white dark:bg-zinc-900 shadow-lg flex flex-col transition-[background] duration-300 rounded-2xl">
       <div className="p-4 border-b border-zinc-200 dark:border-zinc-900">
         <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-          Song List
+          {playlistName ? `PlayList: ${playlistName}` : "Song List"}
         </h3>
       </div>
 
@@ -264,6 +265,9 @@ function SongListCard({ songs, currentSong, onSelect }) {
 function SongPlayer2() {
   const audioRef = useRef(null);
 
+  const { playlistId, playlistName } = useParams();
+  
+
   const [songs, setSongs] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -276,11 +280,19 @@ function SongPlayer2() {
 
   /* LOAD SONGS */
   useEffect(() => {
-    getAllSongs().then((res) => {
-      setSongs(res.data || []);
-      setCurrentIndex(0);
-    });
-  }, []);
+    if (playlistId) {
+      getAllSongsByPlayListId(playlistId).then((res) => {
+        setSongs(res.data || []);
+        setCurrentIndex(0);
+        setIsPlaying(true);
+      });
+    } else {
+      getAllSongs().then((res) => {
+        setSongs(res.data || []);
+        setCurrentIndex(0);
+      });
+    }
+  }, [playlistId]);
 
   /* PLAY / PAUSE */
   useEffect(() => {
@@ -358,6 +370,7 @@ function SongPlayer2() {
 
           <div className="w-80 h-full">
             <SongListCard
+              playlistName={playlistName}
               songs={songs}
               currentSong={currentSong}
               onSelect={selectSong}

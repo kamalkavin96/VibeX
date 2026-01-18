@@ -28,6 +28,8 @@ public interface SongService {
 
     List<SongResponse> getAll();
 
+    List<SongResponse> getAllByPlayListId(UUID id);
+
     SongResponse update(SongUpdateRequest request, MultipartFile thumbnailFile);
 
     void delete(UUID id);

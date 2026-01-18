@@ -19,7 +19,13 @@ export default function AppRoutes() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/playlist" element={<PlaylistsView />} />
         <Route path="/songs" element={<SongsView />} />
-        <Route path="/song-player" element={<SongPlayer2 />} />
+
+        <Route path="song-player">
+          <Route index element={<SongPlayer2 />} />
+          <Route path="playlist/:playlistId/:playlistName" element={<SongPlayer2 />} />
+        </Route>
+
+
         <Route path="/admin">
           <Route index element={<AdminPage />}></Route>
           <Route path="bucket-management" element={<BucketManager />} />

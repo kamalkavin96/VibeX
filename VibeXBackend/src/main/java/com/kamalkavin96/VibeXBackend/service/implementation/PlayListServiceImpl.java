@@ -1,18 +1,15 @@
 package com.kamalkavin96.VibeXBackend.service.implementation;
 
-import com.kamalkavin96.VibeXBackend.dto.request.LabelRequest;
 import com.kamalkavin96.VibeXBackend.dto.request.PlayListRequest;
 import com.kamalkavin96.VibeXBackend.dto.request.PlayListUpdateRequest;
 import com.kamalkavin96.VibeXBackend.dto.response.PlayListCreateResponse;
 import com.kamalkavin96.VibeXBackend.model.PlayList;
 import com.kamalkavin96.VibeXBackend.model.PlayListSongs;
-import com.kamalkavin96.VibeXBackend.model.Song;
 import com.kamalkavin96.VibeXBackend.repository.PlayListRepository;
 import com.kamalkavin96.VibeXBackend.repository.SongRepository;
 import com.kamalkavin96.VibeXBackend.service.MinioStorageService;
 import com.kamalkavin96.VibeXBackend.service.PlayListService;
 import com.kamalkavin96.VibeXBackend.service.PlayListSongsService;
-import com.kamalkavin96.VibeXBackend.service.SongService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +53,11 @@ public class PlayListServiceImpl implements PlayListService {
                 .imageKey(imageKey)
                 .build();
         playList = playListRepository.save(playList);
-        playListSongsService.addSongsToPlaylistBulk(playList.getId(), selectedSongs);
+
+        if (selectedSongs != null){
+            playListSongsService.addSongsToPlaylistBulk(playList.getId(), selectedSongs);
+        }
+
 
         PlayListCreateResponse playListCreateResponse = new PlayListCreateResponse(
                 playList.getId(),
@@ -122,6 +123,8 @@ public class PlayListServiceImpl implements PlayListService {
         // Update songs
         if (req.getSongsIdList() != null && !req.getSongsIdList().isEmpty()) {
             List<UUID> songsIdList = playListSongsService.updateSongsToPlaylist(req.getPlayListId(), req.getSongsIdList());
+        } else {
+            playListSongsService.removeAllSongFromPlaylist(req.getPlayListId());
         }
 
         // Update image

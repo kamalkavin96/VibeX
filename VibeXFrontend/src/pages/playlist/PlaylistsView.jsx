@@ -12,6 +12,7 @@ import PlaylistCard from "../../components/playlist/PlaylistCard";
 import PlaylistCreateModal from "../../components/playlist/PlaylistCreateModal";
 import PlaylistDeleteModal from "../../components/playlist/PlaylistDeleteModal";
 import PlaylistEditModal from "../../components/playlist/PlaylistEditModal";
+import { useNavigate } from "react-router";
 
 const normalizePlaylists = (data = []) =>
   data.map((p) => ({
@@ -28,6 +29,9 @@ export default function PlaylistsView() {
   const [deleteName, setDeleteName] = useState("");
   const [editOpen, setEditOpen] = useState(false);
   const [playlistEdit, setPlaylistEdit] = useState(null);
+
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchPlaylists = async () => {
@@ -76,6 +80,10 @@ export default function PlaylistsView() {
                 });
                 setEditOpen(true);
               }}
+              onPlay={(playlist) => {
+                console.log("Playing playlist:", playlist);
+                navigate(`/song-player/playlist/${playlist.id}/${playlist.name}`);
+              }}
             />
           ))}
         </section>
@@ -110,10 +118,10 @@ export default function PlaylistsView() {
           <PlaylistEditModal
             playlist={playlistEdit}
             onClose={() => setEditOpen(false)}
-            onEdit={(payload)=>{
+            onEdit={(payload) => {
               // console.log(payload)
-              updatePlaylist(payload)
-              setEditOpen(false)
+              updatePlaylist(payload);
+              setEditOpen(false);
             }}
           />
         )}

@@ -10,6 +10,11 @@ export const getAllSongs = () => {
   return api.get("/api/songs");
 };
 
+/* ---------------- GET BY PLAYLIST ID ---------------- */
+export const getAllSongsByPlayListId = (id) => {
+  return api.get(`/api/songs/playlist/${id}`);
+};
+
 /* ---------------- UPLOAD ---------------- */
 export const uploadSong = async ({ songFile, thumbnailFile, title, albumName, singerName }) => {
   const toastId = notifyLoading("Uploading song...");
