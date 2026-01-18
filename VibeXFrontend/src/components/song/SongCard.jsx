@@ -1,8 +1,9 @@
 import { Trash2, Music } from "lucide-react";
 import { API_BASE_URL } from "../../config/apiConfig";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaPlay, FaPlus } from "react-icons/fa";
 
-export default function SongCard({ song, onDelete, onEdit }) {
+export default function SongCard({ song, onDelete, onEdit, onPlayListAdd, onPlay }) {
+
   return (
     <div
       className="
@@ -96,6 +97,10 @@ export default function SongCard({ song, onDelete, onEdit }) {
             <b className="text-zinc-700 dark:text-zinc-300">Uploaded:</b>{" "}
             {new Date(song.createdAt).toLocaleDateString()}
           </div>
+           <div>
+            <b className="text-zinc-700 dark:text-zinc-300">Updated:</b>{" "}
+            {new Date(song.updatedAt).toLocaleDateString()}
+          </div>
         </div>
       </div>
 
@@ -104,7 +109,7 @@ export default function SongCard({ song, onDelete, onEdit }) {
         onClick={onDelete}
         aria-label="Delete song"
         className="
-          absolute top-3 right-3
+          absolute top-2 right-3
           opacity-0 group-hover:opacity-100
           scale-90 group-hover:scale-100
           transition
@@ -120,7 +125,7 @@ export default function SongCard({ song, onDelete, onEdit }) {
         onClick={onEdit}
         aria-label="Delete song"
         className="
-          absolute top-10 right-3
+          absolute top-9 right-3
           opacity-0 group-hover:opacity-100
           scale-90 group-hover:scale-100
           transition
@@ -131,6 +136,39 @@ export default function SongCard({ song, onDelete, onEdit }) {
         <FaEdit size={16} className="text-yellow-500" />
       </button>
 
+        {/* ADD */}
+      <button
+        onClick={onPlayListAdd}
+        aria-label="Add to Playlist"
+        className="
+          absolute top-16 right-3
+          opacity-0 group-hover:opacity-100
+          scale-90 group-hover:scale-100
+          transition
+          rounded-full p-1.5
+          bg-red-500/10 hover:bg-red-500/20
+        "
+      >
+        <FaPlus size={16} className="text-blue-500" />
+      </button>
+
+        {/* PLAY */}
+      <button
+        onClick={onPlay}
+        aria-label="Play song"
+        className="
+          absolute top-23 right-3
+          opacity-0 group-hover:opacity-100
+          scale-90 group-hover:scale-100
+          transition
+          rounded-full p-1.5
+          bg-red-500/10 hover:bg-red-500/20
+        "
+      >
+        <FaPlay size={16} className="text-green-500" />
+      </button>
+
     </div>
   );
 }
+

@@ -11,6 +11,8 @@ import SongCard from "../../components/song/SongCard";
 import SongDeleteModal from "../../components/song/SongDeleteModal";
 import MainContent from "../../components/MainContent";
 import SongEditModal from "../../components/song/SongEditModal";
+import { addSongToPlayList } from "../../services/playListSongs";
+import PlayListSelectorModal from "../../components/song/PlayListSelectorModal";
 
 export default function SongsView() {
   const [songs, setSongs] = useState([]);
@@ -20,6 +22,9 @@ export default function SongsView() {
   const [deleteName, setDeleteName] = useState("");
   const [editSong, setEditSong] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
+
+  const [openPlayList, setOpenPlayList] = useState(false);
+  const [playListSong, setPlayListSong] = useState(null);
 
   const fetchSongs = async () => {
     const res = await getAllSongs();
@@ -62,6 +67,11 @@ export default function SongsView() {
             sm:grid-cols-2
             lg:grid-cols-3      
             gap-4
+
+            max-h-[70vh]
+            overflow-y-auto
+            pr-1
+            custom-scrollbar
           "
           >
             {songs.map((song) => (
@@ -76,6 +86,11 @@ export default function SongsView() {
                 onEdit={()=>{
                   setEditOpen(true);
                   setEditSong(song);
+                }}
+                onPlayListAdd={()=>{
+                  setPlayListSong(song);
+                  setOpenPlayList(true);
+
                 }}
               />
             ))}
@@ -118,6 +133,21 @@ export default function SongsView() {
               }}
             />
           )}
+
+
+          {/* PLAYLIST SELECTOR MODAL */}
+          {openPlayList && (
+            <PlayListSelectorModal
+              songName={playListSong.title}
+              onClose={() => setOpenPlayList(false)}
+              onSelect={(playlistId) => {
+                addSongToPlayList(playlistId, playListSong.id);
+                setOpenPlayList(false);
+              }}
+            />
+          )}
+
+
 
         </div>
       </div>

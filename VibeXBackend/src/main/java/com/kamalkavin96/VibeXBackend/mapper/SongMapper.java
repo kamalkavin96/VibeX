@@ -10,7 +10,7 @@ public class SongMapper {
         Song song = new Song();
         song.setTitle(req.getTitle());
         song.setAlbumName(req.getAlbumName());
-        song.setSingerName(req.getAlbumName());
+        song.setSingerName(req.getSingerName());
         return song;
     }
 

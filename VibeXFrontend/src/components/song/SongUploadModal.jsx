@@ -58,7 +58,6 @@ export default function SongUploadModal({ onClose, onUpload }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
       <div className="w-full max-w-xl rounded-3xl bg-white dark:bg-zinc-900 shadow-2xl p-6">
-
         {/* HEADER */}
         <div className="mb-6">
           <h3 className="text-2xl font-semibold">Upload Song</h3>
@@ -69,7 +68,6 @@ export default function SongUploadModal({ onClose, onUpload }) {
 
         {/* CONTENT */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-
           {/* THUMBNAIL */}
           <div className="flex flex-col items-center gap-4">
             {thumbnailPreview ? (
@@ -130,7 +128,6 @@ export default function SongUploadModal({ onClose, onUpload }) {
 
           {/* FORM */}
           <div className="sm:col-span-2 space-y-4">
-
             {/* SONG FILE */}
             <div>
               <label className="block text-sm font-medium mb-1">
@@ -181,7 +178,10 @@ export default function SongUploadModal({ onClose, onUpload }) {
                   "
                   value={meta[field]}
                   onChange={(e) =>
-                    setMeta({ ...meta, [field]: e.target.value })
+                    setMeta((prev) => ({
+                      ...prev,
+                      [field]: e.target.value,
+                    }))
                   }
                 />
               </div>
