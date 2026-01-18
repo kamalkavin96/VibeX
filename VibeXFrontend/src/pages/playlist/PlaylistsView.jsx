@@ -3,11 +3,15 @@ import {
   createPlaylist,
   deletePlaylist,
   getAllPlaylists,
+  updatePlaylist,
 } from "../../services/playlistService";
+import { getAllSongsByPlaylists } from "../../services/playListSongs.js";
+
 import { randomGradient } from "../../utils/playlistUtils";
 import PlaylistCard from "../../components/playlist/PlaylistCard";
 import PlaylistCreateModal from "../../components/playlist/PlaylistCreateModal";
 import PlaylistDeleteModal from "../../components/playlist/PlaylistDeleteModal";
+import PlaylistEditModal from "../../components/playlist/PlaylistEditModal";
 
 const normalizePlaylists = (data = []) =>
   data.map((p) => ({
@@ -22,6 +26,8 @@ export default function PlaylistsView() {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [deleteName, setDeleteName] = useState("");
+  const [editOpen, setEditOpen] = useState(false);
+  const [playlistEdit, setPlaylistEdit] = useState(null);
 
   useEffect(() => {
     const fetchPlaylists = async () => {
@@ -29,7 +35,7 @@ export default function PlaylistsView() {
       setPlaylists(normalizePlaylists(res?.data || []));
     };
     fetchPlaylists();
-  }, [open, deleteOpen]);
+  }, [open, deleteOpen, editOpen]);
 
   return (
     <main className="pt-12 lg:pl-64 min-h-screen bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-gray-100">
@@ -52,7 +58,7 @@ export default function PlaylistsView() {
         </header>
 
         {/* GRID */}
-        <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+        <section className="grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {playlists.map((pl) => (
             <PlaylistCard
               key={pl.id}
@@ -61,6 +67,14 @@ export default function PlaylistsView() {
                 setDeleteId(pl.id);
                 setDeleteName(pl.name);
                 setDeleteOpen(true);
+              }}
+              onEdit={async () => {
+                const songs = await getAllSongsByPlaylists(pl.id);
+                setPlaylistEdit({
+                  ...pl,
+                  songs,
+                });
+                setEditOpen(true);
               }}
             />
           ))}
@@ -87,6 +101,19 @@ export default function PlaylistsView() {
               await deletePlaylist(deleteId);
               // await fetchPlaylists();
               setDeleteOpen(false);
+            }}
+          />
+        )}
+
+        {/* EDIT */}
+        {editOpen && (
+          <PlaylistEditModal
+            playlist={playlistEdit}
+            onClose={() => setEditOpen(false)}
+            onEdit={(payload)=>{
+              // console.log(payload)
+              updatePlaylist(payload)
+              setEditOpen(false)
             }}
           />
         )}

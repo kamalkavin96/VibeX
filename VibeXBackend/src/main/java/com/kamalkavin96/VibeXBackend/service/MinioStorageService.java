@@ -2,7 +2,6 @@ package com.kamalkavin96.VibeXBackend.service;
 
 import com.kamalkavin96.VibeXBackend.configuration.MinioProperties;
 import io.minio.*;
-import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -130,7 +129,7 @@ public class MinioStorageService {
         }
     }
 
-    public void replaceFile(MultipartFile file, String bucketKey, String folderName, String existingKey) {
+    public String replaceFile(MultipartFile file, String bucketKey, String folderName, String existingKey) {
         try {
             minioClient.putObject(
                     PutObjectArgs.builder()
@@ -143,6 +142,7 @@ public class MinioStorageService {
         } catch (Exception e) {
             throw new RuntimeException("Failed to replace file: " + existingKey, e);
         }
+        return bucketKey;
     }
 
     private String getExtension(String filename) {

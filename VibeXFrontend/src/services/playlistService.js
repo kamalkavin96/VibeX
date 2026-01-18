@@ -12,6 +12,10 @@ export const createPlaylist = async (data) => {
     formData.append("description", data.description);
     formData.append("userId", data.userId);
 
+    if (data.selectedSongs.length > 0) {
+      formData.append("selectedSongs", data.selectedSongs);
+    }
+
     if (data.image) {
       formData.append("image", data.image);
     }
@@ -63,6 +67,44 @@ export const deletePlaylist = async (id) => {
     updateToast(toastId, "success", "Playlist deleted successfully");
   } catch (error) {
     updateToast(toastId, "error", "Failed to delete playlist");
+    throw error;
+  }
+};
+
+
+/* ---------------- UPDATE PLAYLIST ---------------- */
+export const updatePlaylist = async (data) => {
+
+  // console.log(data);
+
+  const toastId = notifyLoading("Creating playlist...");
+
+  try {
+    const formData = new FormData();
+    formData.append("id", data.id);
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    
+    if (data.selectedSongs.length > 0) {
+      formData.append("selectedSongs", data.selectedSongs);
+    }
+
+    if (data.image) {
+      formData.append("imageKey", data.imageKey);
+      formData.append("image", data.image);
+    }
+
+    const res = await api.put("/api/playlists", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    updateToast(toastId, "success", "Playlist updated successfully");
+    return res.data;
+
+  } catch (error) {
+    updateToast(toastId, "error", "Failed to update playlist");
     throw error;
   }
 };

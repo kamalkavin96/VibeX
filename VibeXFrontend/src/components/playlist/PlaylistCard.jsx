@@ -1,147 +1,147 @@
-import { useState } from "react";
+import { Trash2, Music } from "lucide-react";
 import { API_BASE_URL } from "../../config/apiConfig";
+import { FaEdit, FaPlay } from "react-icons/fa";
 
-const PlaylistCard = ({ playlist, onDelete }) => {
-  const [openMenu, setOpenMenu] = useState(false);
-  const [imgError, setImgError] = useState(false);
-
+export default function PlaylistCard({ playlist, onDelete, onEdit }) {
   return (
     <div
       className="
-        group relative rounded-2xl p-3
-        bg-white dark:bg-zinc-900
-        border border-gray-200 dark:border-zinc-800
-        hover:shadow-lg transition
+        group relative
+        flex items-center
+        gap-3
+        rounded-2xl
+        border border-black/5 dark:border-white/10
+        bg-linear-to-br
+        from-white via-zinc-50 to-zinc-100
+        dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800
+        shadow-sm
+        hover:shadow-xl
+        hover:-translate-y-1
+        transition-all duration-300
+        p-3
       "
     >
-      {/* MENU BUTTON */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          setOpenMenu((prev) => !prev);
-        }}
+      {/* GRADIENT GLOW */}
+      <div
         className="
-          absolute top-3 right-3 z-20
-          h-8 w-8 rounded-full
-          flex items-center justify-center
-          bg-transparent
-          hover:bg-white/30 dark:hover:bg-white/15
+          pointer-events-none
+          absolute inset-0
+          opacity-0 group-hover:opacity-100
           transition
+          bg-linear-to-br
+          from-indigo-500/10 via-purple-500/10 to-pink-500/10
+          rounded-2xl
+        "
+      />
+
+      {/* IMAGE */}
+      <div
+        className="
+          relative
+          w-20 h-20
+          shrink-0
+          rounded-xl
+          overflow-hidden
+          bg-linear-to-br
+          from-indigo-500 to-purple-600
+          flex items-center justify-center
         "
       >
-        <MoreVerticalIcon className="h-4 w-4" />
-      </button>
-
-      {/* MENU */}
-      {openMenu && (
-        <div
-          onClick={(e) => e.stopPropagation()}
-          className="
-            absolute top-12 right-3 z-50
-            w-32 rounded-xl
-            bg-white dark:bg-zinc-800
-            border border-gray-200 dark:border-zinc-700
-            shadow-lg overflow-hidden
-          "
-        >
-          <button className="w-full px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-zinc-700">
-            <span className="flex items-center gap-2">
-              <EditIcon className="h-4 w-4" />
-              Edit
-            </span>
-          </button>
-
-          <button
-            onClick={async () => {
-              setOpenMenu(false);
-              await onDelete(playlist.id);
-            }}
-            className="
-              w-full px-4 py-2 text-sm
-              text-red-600 dark:text-red-400
-              hover:bg-red-50 dark:hover:bg-red-900/30
-            "
-          >
-            <span className="flex items-center gap-2">
-              <TrashIcon className="h-4 w-4" />
-              Delete
-            </span>
-          </button>
-        </div>
-      )}
-
-      {/* COVER */}
-      <div className="relative h-36 rounded-xl mb-3 overflow-hidden">
-        {!imgError && playlist.imageKey ? (
+        {playlist.imageKey ? (
           <img
             src={`${API_BASE_URL}/api/playlists/image/${playlist.imageKey}`}
             alt="Playlist cover"
-            onError={() => setImgError(true)}
-            className="h-full w-full object-cover"
+            className="
+              w-full h-full object-cover
+              group-hover:scale-105
+              transition-transform duration-300
+            "
           />
         ) : (
-          <div
-            className={`h-full w-full bg-linear-to-br ${playlist.gradient}`}
-          />
+          <Music size={28} className="text-white/80" />
         )}
 
-        {/* PLAY BUTTON */}
-        <button
+        {/* IMAGE SHINE */}
+        <div
           className="
-            absolute bottom-3 right-3
-            h-10 w-10 rounded-full
-            bg-black/40 text-white
-            flex items-center justify-center
+            absolute inset-0
+            bg-linear-to-tr
+            from-white/10 to-transparent
             opacity-0 group-hover:opacity-100
             transition
           "
-        >
-          <PlayIcon className="h-5 w-5 ml-0.5" />
-        </button>
+        />
       </div>
 
-      {/* INFO */}
-      <h4 className="text-sm font-semibold truncate">
-        {playlist.name}
-      </h4>
+      {/* CONTENT */}
+      <div className="flex-1 min-w-0">
+        <h4 className="font-semibold truncate text-zinc-900 dark:text-zinc-100">
+          {playlist.name}
+        </h4>
 
-      <p className="text-xs text-gray-500 dark:text-gray-400">
-        {playlist.songs ?? 0} songs ·{" "}
-        {playlist.description || "No description"}
-      </p>
+        <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-1">
+          {playlist.songs ?? 0} songs
+        </p>
+
+        <div
+          className="
+            text-[11px]
+            text-zinc-600 dark:text-zinc-400
+            line-clamp-1
+          "
+        >
+          {playlist.description || "No description"}
+        </div>
+      </div>
+
+      {/* DELETE */}
+      <button
+        onClick={onDelete}
+        aria-label="Delete playlist"
+        className="
+          absolute top-3 right-3
+          opacity-0 group-hover:opacity-100
+          scale-90 group-hover:scale-100
+          transition
+          rounded-full p-1.5
+          bg-red-500/10 hover:bg-red-500/20
+        "
+      >
+        <Trash2 size={16} className="text-red-500" />
+      </button>
+
+      {/* EDIT */}
+      <button
+        onClick={onEdit}
+        aria-label="Edit playlist"
+        className="
+          absolute top-10 right-3
+          opacity-0 group-hover:opacity-100
+          scale-90 group-hover:scale-100
+          transition
+          rounded-full p-1.5
+          bg-yellow-500/10 hover:bg-yellow-500/20
+        "
+      >
+        <FaEdit size={16} className="text-yellow-500" />
+      </button>
+
+      {/* PLAY */}
+      <button
+        // onClick={onEdit}
+        aria-label="Edit playlist"
+        className="
+          absolute top-17 right-3
+          opacity-0 group-hover:opacity-100
+          scale-90 group-hover:scale-100
+          transition
+          rounded-full p-1.5
+          bg-yellow-500/10 hover:bg-yellow-500/20
+        "
+      >
+        <FaPlay size={16} className="text-green-500" />
+      </button>
+
     </div>
   );
-};
-
-/* ---------------- SVG ICONS ---------------- */
-
-const MoreVerticalIcon = ({ className }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="12" cy="5" r="1" />
-    <circle cx="12" cy="12" r="1" />
-    <circle cx="12" cy="19" r="1" />
-  </svg>
-);
-
-const EditIcon = ({ className }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M12 20h9" />
-    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
-  </svg>
-);
-
-const TrashIcon = ({ className }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M3 6h18" />
-    <path d="M8 6V4h8v2" />
-    <path d="M19 6l-1 14H6L5 6" />
-  </svg>
-);
-
-const PlayIcon = ({ className }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M8 5v14l11-7z" />
-  </svg>
-);
-
-export default PlaylistCard;
+}
