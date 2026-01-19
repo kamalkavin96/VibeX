@@ -7,7 +7,7 @@ import ThemeToggle from "./ThemeToggle";
 ----------------------------------- */
 function AppTitle() {
   return (
-    <h1 className="flex items-center font-bold tracking-tight">
+    <h1 className="ml-4 flex items-center font-bold tracking-tight">
       <span className="text-xl md:text-2xl text-zinc-900 dark:text-white">
         Vibe
       </span>
@@ -46,7 +46,7 @@ export default function Header({ open, setOpen, dark, setDark }) {
       "
     >
       {/* LEFT */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
         <button
           onClick={() => setOpen(!open)}
           aria-label="Open menu"

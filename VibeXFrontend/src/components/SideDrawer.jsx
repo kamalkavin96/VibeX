@@ -17,6 +17,7 @@ const MAIN_NAV = [
   { label: "Songs", path: "/songs", icon: <MdMusicNote size={24} /> },
   { label: "Playlists", path: "/playlist", icon: <MdFormatListBulleted size={24} />,},
   { label: "Song Player", path: "/song-player", icon: <MdPlayArrow size={26} />,},
+  { label: "Test", path: "/test", icon: <MdPlayArrow size={26} />,},
 ];
 
 const FOOTER_NAV = [

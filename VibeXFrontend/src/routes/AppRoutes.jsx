@@ -8,6 +8,7 @@ import SongsView from "../pages/song/SongsView";
 import AdminPage from "../pages/adminPages/AdminPage";
 import BucketManager from "../pages/adminPages/BucketManager";
 import SongPlayer2 from "../pages/SongPlayer2";
+import TestPage from "../pages/TestPage";
 
 export default function AppRoutes() {
   return (
@@ -19,6 +20,7 @@ export default function AppRoutes() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/playlist" element={<PlaylistsView />} />
         <Route path="/songs" element={<SongsView />} />
+        <Route path="/test" element={<TestPage></TestPage>}/>
 
         <Route path="song-player">
           <Route index element={<SongPlayer2 />} />
