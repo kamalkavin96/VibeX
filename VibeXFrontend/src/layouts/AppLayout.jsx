@@ -14,7 +14,6 @@ export default function AppLayout() {
 
   useEffect(() => {
     const root = document.documentElement;
-
     if (dark) {
       root.classList.add("dark");
       localStorage.setItem("theme", "dark");
@@ -26,8 +25,9 @@ export default function AppLayout() {
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-black">
+
       {/* HEADER */}
-      <Header setOpen={setOpen} dark={dark} setDark={setDark} />
+      <Header open={open} setOpen={setOpen} dark={dark} setDark={setDark} />
 
       {/* MOBILE OVERLAY */}
       {open && (
@@ -40,11 +40,8 @@ export default function AppLayout() {
       {/* SIDEDRAWER */}
       <SideDrawer open={open} setOpen={setOpen} />
 
-      {/* 🔥 ROUTED CONTENT */}
-      
       <Outlet />
       
-
       {/* TOAST */}
       <ToastContainer
         position="top-right"

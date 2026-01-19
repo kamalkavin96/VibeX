@@ -40,10 +40,10 @@ export default function SongsView() {
 
   return (
     <MainContent>
-       <div className="h-[calc(100vh-3.5rem)] w-full m-1 bg-linear-to-br  bg-white/10 dark:bg-black/10 rounded-2xl">
+       <div className="h-[calc(100vh-4.7rem)] w-full m-1">
         <div className="max-w-7xl mx-auto px-4 py-6 space-y-8">
           {/* HEADER */}
-          <header className="flex items-center justify-between">
+          <header className="flex items-center justify-between mb-3">
             <div>
               <h2 className="text-3xl font-semibold">Songs</h2>
               <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -68,7 +68,7 @@ export default function SongsView() {
             lg:grid-cols-3      
             gap-4
 
-            max-h-[70vh]
+            max-h-[74vh]
             overflow-y-auto
             pr-1
             custom-scrollbar

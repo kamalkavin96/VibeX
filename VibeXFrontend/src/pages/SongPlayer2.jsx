@@ -29,16 +29,16 @@ function SongPlayerCard({
       .padStart(2, "0")}`;
 
   return (
-    <div className="h-full flex items-center justify-center p-4">
+    <div className="h-full flex justify-center">
       <div
         className="
           w-full max-w-md
           rounded-3xl
           bg-white/70 dark:bg-zinc-900/70
           backdrop-blur-xl
-          border border-zinc-200 dark:border-zinc-800
+          border border-zinc-200 dark:border-zinc-700
           shadow-2xl
-          p-6
+          p-7
           flex flex-col items-center
         "
       >
@@ -340,7 +340,7 @@ function SongPlayer2() {
 
   return (
     <MainContent>
-      <div className="h-[calc(100vh-3.5rem)] w-full m-1">
+      <div className="h-[calc(100vh-4.8rem)] w-full m-1">
         {currentSong && (
           <audio
             ref={audioRef}
@@ -353,7 +353,7 @@ function SongPlayer2() {
         )}
 
         <div className="h-full flex gap-1">
-          <div className="flex-1 h-full">
+          <div className="flex-1">
             <SongPlayerCard
               song={currentSong}
               isPlaying={isPlaying}
@@ -368,7 +368,7 @@ function SongPlayer2() {
             />
           </div>
 
-          <div className="w-80 h-full">
+          <div className="w-80 mr-3 border border-white/20 dark:border-zinc-700 rounded-2xl">
             <SongListCard
               playlistName={playlistName}
               songs={songs}

@@ -13,6 +13,7 @@ import PlaylistCreateModal from "../../components/playlist/PlaylistCreateModal";
 import PlaylistDeleteModal from "../../components/playlist/PlaylistDeleteModal";
 import PlaylistEditModal from "../../components/playlist/PlaylistEditModal";
 import { useNavigate } from "react-router";
+import MainContent from "../../components/MainContent.jsx";
 
 const normalizePlaylists = (data = []) =>
   data.map((p) => ({
@@ -42,7 +43,7 @@ export default function PlaylistsView() {
   }, [open, deleteOpen, editOpen]);
 
   return (
-    <main className="pt-12 lg:pl-64 min-h-screen bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-gray-100">
+    <MainContent>
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-8">
         {/* HEADER */}
         <header className="flex items-center justify-between">
@@ -126,6 +127,6 @@ export default function PlaylistsView() {
           />
         )}
       </div>
-    </main>
+    </MainContent>
   );
 }
