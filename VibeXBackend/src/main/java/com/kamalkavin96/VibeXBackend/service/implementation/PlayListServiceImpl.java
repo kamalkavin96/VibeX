@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -140,6 +141,7 @@ public class PlayListServiceImpl implements PlayListService {
 
             playList.setImageKey(imageKey);
         }
+        playList.setUpdatedAt(Instant.now());
 
         return playListRepository.save(playList);
     }

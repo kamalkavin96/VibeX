@@ -131,10 +131,20 @@ public class MinioStorageService {
 
     public String replaceFile(MultipartFile file, String bucketKey, String folderName, String existingKey) {
         try {
+
+            String folderObjectKey;
+            if (existingKey.isEmpty()){
+                String extension = getExtension(file.getOriginalFilename());
+                existingKey =  UUID.randomUUID() + extension;
+            }
+                folderObjectKey = folderName +"/" + existingKey;
+
+
+
             minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(properties.getBuckets().get(bucketKey))
-                            .object(folderName + "/" + existingKey)
+                            .object(folderObjectKey)
                             .stream(file.getInputStream(), file.getSize(), -1)
                             .contentType(file.getContentType())
                             .build()
@@ -142,7 +152,7 @@ public class MinioStorageService {
         } catch (Exception e) {
             throw new RuntimeException("Failed to replace file: " + existingKey, e);
         }
-        return bucketKey;
+        return existingKey;
     }
 
     private String getExtension(String filename) {

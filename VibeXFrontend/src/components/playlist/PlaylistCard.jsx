@@ -49,7 +49,7 @@ export default function PlaylistCard({ playlist, onDelete, onEdit, onPlay }) {
       >
         {playlist.imageKey ? (
           <img
-            src={`${API_BASE_URL}/api/playlists/image/${playlist.imageKey}`}
+            src={`${API_BASE_URL}/api/playlists/image/${playlist.imageKey}?v=${playlist.updatedAt}`}
             alt="Playlist cover"
             className="
               w-full h-full object-cover

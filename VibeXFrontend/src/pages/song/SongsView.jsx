@@ -13,6 +13,7 @@ import MainContent from "../../components/MainContent";
 import SongEditModal from "../../components/song/SongEditModal";
 import { addSongToPlayList } from "../../services/playListSongs";
 import PlayListSelectorModal from "../../components/song/PlayListSelectorModal";
+import { useNavigate } from "react-router";
 
 export default function SongsView() {
   const [songs, setSongs] = useState([]);
@@ -25,6 +26,8 @@ export default function SongsView() {
 
   const [openPlayList, setOpenPlayList] = useState(false);
   const [playListSong, setPlayListSong] = useState(null);
+
+  const navigate = useNavigate()
 
   const fetchSongs = async () => {
     const res = await getAllSongs();
@@ -91,6 +94,10 @@ export default function SongsView() {
                   setPlayListSong(song);
                   setOpenPlayList(true);
 
+                }}
+                onPlay={(playSong)=>{
+                  // console.log(playSong);
+                  navigate(`/song-player/song/${playSong.id}`);
                 }}
               />
             ))}

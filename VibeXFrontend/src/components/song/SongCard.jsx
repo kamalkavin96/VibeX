@@ -154,7 +154,7 @@ export default function SongCard({ song, onDelete, onEdit, onPlayListAdd, onPlay
 
         {/* PLAY */}
       <button
-        onClick={onPlay}
+        onClick={()=>onPlay(song)}
         aria-label="Play song"
         className="
           absolute top-23 right-3

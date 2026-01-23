@@ -51,7 +51,7 @@ const PlaylistEditModal = ({ playlist, onClose, onEdit }) => {
       name: name.trim(),
       description: desc.trim(),
       image: imageFile,
-      imageKey: playlist.imageKey,
+      imageKey: playlist.imageKey ? playlist.imageKey : "",
       selectedSongs, // toggle-based backend logic
     });
   };

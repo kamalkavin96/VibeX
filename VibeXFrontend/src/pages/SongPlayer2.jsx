@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import MainContent from "../components/MainContent";
-import { getAllSongs, getAllSongsByPlayListId } from "../services/songService";
+import { getAllSongs, getAllSongsByPlayListId, getSongById } from "../services/songService";
 
 import { FaPause, FaPlay, FaVolumeUp } from "react-icons/fa";
 import { IoPlaySkipBackSharp, IoPlaySkipForward } from "react-icons/io5";
@@ -206,6 +206,19 @@ function SongPlayerCard({
 
 /* ================= SONG LIST ================= */
 function SongListCard({ songs, currentSong, onSelect, playlistName = null }) {
+  const itemRef = useRef(null);
+
+  useEffect(() => {
+    
+    if (itemRef.current) {
+      itemRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }
+  }, [currentSong?.id]);
+  
+
   return (
     <div className="h-full bg-white dark:bg-zinc-900 shadow-lg flex flex-col transition-[background] duration-300 rounded-2xl">
       <div className="p-4 border-b border-zinc-200 dark:border-zinc-900">
@@ -218,9 +231,11 @@ function SongListCard({ songs, currentSong, onSelect, playlistName = null }) {
         <ul className="space-y-2">
           {songs.map((song) => {
             const active = currentSong?.id === song.id;
+            
 
             return (
               <li
+                ref={active ? itemRef : null}
                 key={song.id}
                 onClick={() => onSelect(song)}
                 className={`p-3 rounded-xl cursor-pointer flex items-center transition
@@ -265,7 +280,8 @@ function SongListCard({ songs, currentSong, onSelect, playlistName = null }) {
 function SongPlayer2() {
   const audioRef = useRef(null);
 
-  const { playlistId, playlistName } = useParams();
+  const { playlistId, playlistName, songId } = useParams();
+  
   
 
   const [songs, setSongs] = useState([]);
@@ -286,13 +302,19 @@ function SongPlayer2() {
         setCurrentIndex(0);
         setIsPlaying(true);
       });
+    } else if (songId) {
+      getSongById(songId).then((res) => {
+        setSongs(res || []);
+        setCurrentIndex(0);
+        setIsPlaying(true);
+      });
     } else {
       getAllSongs().then((res) => {
         setSongs(res.data || []);
         setCurrentIndex(0);
       });
     }
-  }, [playlistId]);
+  }, [playlistId, songId]);
 
   /* PLAY / PAUSE */
   useEffect(() => {

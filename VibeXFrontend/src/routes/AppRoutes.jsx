@@ -25,6 +25,7 @@ export default function AppRoutes() {
         <Route path="song-player">
           <Route index element={<SongPlayer2 />} />
           <Route path="playlist/:playlistId/:playlistName" element={<SongPlayer2 />} />
+          <Route path="song/:songId" element={<SongPlayer2 />} />
         </Route>
 
 

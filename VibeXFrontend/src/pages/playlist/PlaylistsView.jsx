@@ -31,6 +31,8 @@ export default function PlaylistsView() {
   const [editOpen, setEditOpen] = useState(false);
   const [playlistEdit, setPlaylistEdit] = useState(null);
 
+  const [loadPlayList, setLoadPlayList] = useState(false);
+
   const navigate = useNavigate();
 
 
@@ -40,7 +42,7 @@ export default function PlaylistsView() {
       setPlaylists(normalizePlaylists(res?.data || []));
     };
     fetchPlaylists();
-  }, [open, deleteOpen, editOpen]);
+  }, [open, loadPlayList]);
 
   return (
     <MainContent>
@@ -110,6 +112,7 @@ export default function PlaylistsView() {
               await deletePlaylist(deleteId);
               // await fetchPlaylists();
               setDeleteOpen(false);
+              setLoadPlayList(!loadPlayList);
             }}
           />
         )}
@@ -119,10 +122,10 @@ export default function PlaylistsView() {
           <PlaylistEditModal
             playlist={playlistEdit}
             onClose={() => setEditOpen(false)}
-            onEdit={(payload) => {
-              // console.log(payload)
-              updatePlaylist(payload);
+            onEdit={async (payload) => {
+              await updatePlaylist(payload);
               setEditOpen(false);
+              setLoadPlayList(!loadPlayList);
             }}
           />
         )}
