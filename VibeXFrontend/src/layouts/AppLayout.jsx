@@ -4,8 +4,10 @@ import Header from "../components/Header";
 import SideDrawer from "../components/SideDrawer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import BottomMusicPlayer from "../components/BottomMusicPlayer";
 
-export default function AppLayout() {
+
+export default function AppLayout({playerOpen}) {
   const [open, setOpen] = useState(false);
 
   const [dark, setDark] = useState(() => {
@@ -38,10 +40,12 @@ export default function AppLayout() {
       )}
 
       {/* SIDEDRAWER */}
-      <SideDrawer open={open} setOpen={setOpen} />
+      <SideDrawer open={open} setOpen={setOpen} heightReduce={playerOpen ? "10.7" : "4.3"}/>
 
       <Outlet />
+      {playerOpen && <BottomMusicPlayer></BottomMusicPlayer>}
       
+
       {/* TOAST */}
       <ToastContainer
         position="top-right"

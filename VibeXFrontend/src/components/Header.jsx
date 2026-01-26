@@ -33,15 +33,15 @@ export default function Header({ open, setOpen, dark, setDark }) {
   return (
     <header
       className="
-        fixed inset-x-2 top-2
-        h-14
+        fixed
+        h-16
+        w-full
         z-40
         flex items-center justify-between
         px-2
-        rounded-2xl
         backdrop-blur-xl
         bg-white/80 dark:bg-zinc-900/80
-        border border-white/20 dark:border-zinc-700
+        border-b border-white/20 dark:border-zinc-700
         shadow-sm shadow-black/5
       "
     >

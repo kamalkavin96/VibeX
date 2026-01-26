@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   createPlaylist,
   deletePlaylist,
@@ -12,8 +12,9 @@ import PlaylistCard from "../../components/playlist/PlaylistCard";
 import PlaylistCreateModal from "../../components/playlist/PlaylistCreateModal";
 import PlaylistDeleteModal from "../../components/playlist/PlaylistDeleteModal";
 import PlaylistEditModal from "../../components/playlist/PlaylistEditModal";
-import { useNavigate } from "react-router";
+// import { useNavigate } from "react-router";
 import MainContent from "../../components/MainContent.jsx";
+import AudioPlayerContext from "../../context/audioContext/AudioPlayerContext.jsx";
 
 const normalizePlaylists = (data = []) =>
   data.map((p) => ({
@@ -33,7 +34,9 @@ export default function PlaylistsView() {
 
   const [loadPlayList, setLoadPlayList] = useState(false);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+
+  const {setPlayListSongFunc} = useContext(AudioPlayerContext);
 
 
   useEffect(() => {
@@ -46,9 +49,10 @@ export default function PlaylistsView() {
 
   return (
     <MainContent>
-      <div className="max-w-7xl mx-auto px-4 py-6 space-y-8">
+      <div className="h-[calc(100vh-4.7rem)] w-full m-1">
+      <div className="max-w-7xl mx-auto px-4 py-1 space-y-8">
         {/* HEADER */}
-        <header className="flex items-center justify-between">
+        <header className="flex items-center justify-between mb-3">
           <div>
             <h2 className="text-3xl font-semibold">Playlists</h2>
             <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -65,7 +69,7 @@ export default function PlaylistsView() {
         </header>
 
         {/* GRID */}
-        <section className="grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <section className="grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-h-[77.8vh] overflow-y-auto custom-scrollbar">
           {playlists.map((pl) => (
             <PlaylistCard
               key={pl.id}
@@ -84,8 +88,9 @@ export default function PlaylistsView() {
                 setEditOpen(true);
               }}
               onPlay={(playlist) => {
-                console.log("Playing playlist:", playlist);
-                navigate(`/song-player/playlist/${playlist.id}/${playlist.name}`);
+                // console.log("Playing playlist:", playlist);
+                // navigate(`/song-player/playlist/${playlist.id}/${playlist.name}`);
+                setPlayListSongFunc(playlist)
               }}
             />
           ))}
@@ -129,6 +134,7 @@ export default function PlaylistsView() {
             }}
           />
         )}
+      </div>
       </div>
     </MainContent>
   );

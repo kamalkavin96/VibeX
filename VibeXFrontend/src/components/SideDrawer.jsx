@@ -13,11 +13,8 @@ import {
 ========================================================= */
 
 const MAIN_NAV = [
-  { label: "Home", path: "/", icon: <MdOutlineHome size={24} /> },
   { label: "Songs", path: "/songs", icon: <MdMusicNote size={24} /> },
-  { label: "Playlists", path: "/playlist", icon: <MdFormatListBulleted size={24} />,},
-  { label: "Song Player", path: "/song-player", icon: <MdPlayArrow size={26} />,},
-  { label: "Test", path: "/test", icon: <MdPlayArrow size={26} />,},
+  // { label: "Song Player", path: "/song-player", icon: <MdPlayArrow size={26} />,},
 ];
 
 const FOOTER_NAV = [
@@ -29,17 +26,17 @@ const FOOTER_NAV = [
    SIDEDRAWER
 ========================================================= */
 
-export default function SideDrawer({ open, setOpen }) {
+export default function SideDrawer({ open, setOpen, heightReduce }) {
   const closeDrawer = () => setOpen(false);
 
   return (
-    <aside
+    <aside     
       className={`
         fixed
         top-17.5  /* header height + top gap */
-        left-2
+        
         w-64
-        h-[calc(100vh-4.3rem-0.5rem)]
+        h-[calc(100vh-${heightReduce}rem)]
         z-40
         rounded-2xl
         backdrop-blur-xl
@@ -50,6 +47,7 @@ export default function SideDrawer({ open, setOpen }) {
         ${open ? "translate-x-0" : "-translate-x-70"}
         lg:translate-x-0
       `}
+      
     >
       <nav className="p-3 space-y-1 text-sm font-medium h-full overflow-y-auto">
         {MAIN_NAV.map((item) => (

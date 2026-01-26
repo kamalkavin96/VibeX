@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import {
   deleteSong,
@@ -13,9 +13,11 @@ import MainContent from "../../components/MainContent";
 import SongEditModal from "../../components/song/SongEditModal";
 import { addSongToPlayList } from "../../services/playListSongs";
 import PlayListSelectorModal from "../../components/song/PlayListSelectorModal";
-import { useNavigate } from "react-router";
+// import { useNavigate } from "react-router";
+import AudioPlayerContext from "../../context/audioContext/AudioPlayerContext";
 
-export default function SongsView() {
+
+export default function SongsView({ playerOpen }) {
   const [songs, setSongs] = useState([]);
   const [open, setOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -27,7 +29,9 @@ export default function SongsView() {
   const [openPlayList, setOpenPlayList] = useState(false);
   const [playListSong, setPlayListSong] = useState(null);
 
-  const navigate = useNavigate()
+  // const navigate = useNavigate();
+
+  const {setSongFunc} = useContext(AudioPlayerContext);
 
   const fetchSongs = async () => {
     const res = await getAllSongs();
@@ -43,8 +47,13 @@ export default function SongsView() {
 
   return (
     <MainContent>
-       <div className="h-[calc(100vh-4.7rem)] w-full m-1">
-        <div className="max-w-7xl mx-auto px-4 py-6 space-y-8">
+      <div
+        className="w-full m-1 overflow-hidden custom-scrollbar"
+        style={{
+          height: `calc(100vh - ${playerOpen ? "10.5" : "4.7"}rem)`,
+        }}
+      >
+        <div className="max-w-7xl 2xl:max-w-full px-4 py-1 space-y-8">
           {/* HEADER */}
           <header className="flex items-center justify-between mb-3">
             <div>
@@ -64,19 +73,26 @@ export default function SongsView() {
 
           {/* SONG GRID */}
           <section
-            className="
-            grid
-            grid-cols-1
-            sm:grid-cols-2
-            lg:grid-cols-3      
-            gap-4
+  className="
+    grid
+    grid-cols-1
+    sm:grid-cols-2
+    lg:grid-cols-3 
+    2xl:grid-cols-4
+    gap-4
+    overflow-y-auto
+    pr-1
+    custom-scrollbar
+    h-full
 
-            max-h-[74vh]
-            overflow-y-auto
-            pr-1
-            custom-scrollbar
-          "
-          >
+    max-h-(--songs-max-h)
+    2xl:max-h-(--songs-max-h-2xl)
+  "
+  style={{
+    "--songs-max-h": playerOpen ? "63vh" : "77.8vh",
+    "--songs-max-h-2xl": playerOpen ? "74vh" : "84vh",
+  }}
+>
             {songs.map((song) => (
               <SongCard
                 key={song.id}
@@ -86,18 +102,19 @@ export default function SongsView() {
                   setDeleteName(song.title);
                   setDeleteOpen(true);
                 }}
-                onEdit={()=>{
+                onEdit={() => {
                   setEditOpen(true);
                   setEditSong(song);
                 }}
-                onPlayListAdd={()=>{
+                onPlayListAdd={() => {
                   setPlayListSong(song);
                   setOpenPlayList(true);
-
                 }}
-                onPlay={(playSong)=>{
+                onPlay={(playSong) => {
                   // console.log(playSong);
-                  navigate(`/song-player/song/${playSong.id}`);
+                  // navigate(`/song-player/song/${playSong.id}`);
+                  setSongFunc(playSong);
+
                 }}
               />
             ))}
@@ -132,7 +149,7 @@ export default function SongsView() {
           {editOpen && (
             <SongEditModal
               song={editSong}
-              onClose={()=>setEditOpen(false)}
+              onClose={() => setEditOpen(false)}
               onEdit={async (payload) => {
                 await updateSong(payload);
                 await fetchSongs();
@@ -140,7 +157,6 @@ export default function SongsView() {
               }}
             />
           )}
-
 
           {/* PLAYLIST SELECTOR MODAL */}
           {openPlayList && (
@@ -153,9 +169,6 @@ export default function SongsView() {
               }}
             />
           )}
-
-
-
         </div>
       </div>
     </MainContent>
