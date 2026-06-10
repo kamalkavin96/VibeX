@@ -6,9 +6,9 @@ spring:
       max-request-size: 500MB
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/vibex_db
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://host:port/vibex_db
+    username: user
+    password: pass
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -24,9 +24,9 @@ spring:
         format_sql: true
 
 minio:
-  url: http://localhost:9000
-  access-key: minioadmin
-  secret-key: minioadmin
+  url: host-with-port-if
+  access-key: minio-user
+  secret-key: minio-pass
   buckets:
     playlist-images: playlist-images
     song-files: song-files

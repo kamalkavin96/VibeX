@@ -34,9 +34,9 @@ export default function SideDrawer({ open, setOpen, heightReduce }) {
       className={`
         fixed
         top-17.5  /* header height + top gap */
-        
+        left-2
         w-64
-        h-[calc(100vh-${heightReduce}rem)]
+        h-[calc(100vh-70px-80px-16px)]
         z-40
         rounded-2xl
         backdrop-blur-xl
