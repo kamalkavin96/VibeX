@@ -7,11 +7,16 @@ import {
   MdOutlineSettings,
   MdPlayArrow,
 } from "react-icons/md";
-import { useEffect } from "react";
+
 import { RiHome3Line, RiPlayList2Fill } from "react-icons/ri";
 import { FaPlay, FaRegCompass, FaRegHeart } from "react-icons/fa";
 import { IoMdAlbums } from "react-icons/io";
-import { PiClockBold, PiClockClockwiseBold, PiFolderSimpleUserBold, PiPlayBold } from "react-icons/pi";
+import {
+  PiClockBold,
+  PiClockClockwiseBold,
+  PiFolderSimpleUserBold,
+  PiPlayBold,
+} from "react-icons/pi";
 import { IoAlbumsOutline, IoPlayOutline } from "react-icons/io5";
 import { LuAlbum } from "react-icons/lu";
 
@@ -20,108 +25,165 @@ import { LuAlbum } from "react-icons/lu";
 ========================================================= */
 
 const MENU_NAV = [
-  { label: "Home", path: "/home", icon: <RiHome3Line  size={20} /> },
-  { label: "Discover", path: "/discover-songs", icon: <FaRegCompass size={20} /> },
+  { label: "Home", path: "/home", icon: <RiHome3Line size={20} /> },
+  {
+    label: "Discover",
+    path: "/discover-songs",
+    icon: <FaRegCompass size={20} />,
+  },
   { label: "Album", path: "/album", icon: <LuAlbum size={20} /> },
-  { label: "Artist", path: "/artist", icon: <PiFolderSimpleUserBold  size={20} /> },
-  { label: "Player", path: "/song-player", icon: <PiPlayBold size={20} />,},
+  {
+    label: "Artist",
+    path: "/artist",
+    icon: <PiFolderSimpleUserBold size={20} />,
+  },
+  { label: "Player", path: "/song-player", icon: <PiPlayBold size={20} /> },
 ];
 
 const LIBRARY_NAV = [
-  { label: "Recently Added", path: "/recently-added", icon: <PiClockBold  size={20} /> },
-  { label: "Most Played", path: "/most-played", icon: <PiClockClockwiseBold size={20} /> },
+  {
+    label: "Recently Added",
+    path: "/recently-added",
+    icon: <PiClockBold size={20} />,
+  },
+  {
+    label: "Most Played",
+    path: "/most-played",
+    icon: <PiClockClockwiseBold size={20} />,
+  },
 ];
 
 const PLAY_FAV_NAV = [
-  { label: "Your favorites", path: "/your-favorites", icon: <FaRegHeart  size={20} /> },
-  { label: "Your playlist", path: "/playlist", icon: <RiPlayList2Fill size={20} /> },
+  {
+    label: "Your favorites",
+    path: "/your-favorites",
+    icon: <FaRegHeart size={20} />,
+  },
+  {
+    label: "Your playlist",
+    path: "/playlist",
+    icon: <RiPlayList2Fill size={20} />,
+  },
 ];
 
 const FOOTER_NAV = [
-  { label: "Admin", path: "/admin", icon: <MdAdminPanelSettings size={20} />, },
-  { label: "Settings", path: "/settings", icon: <MdOutlineSettings size={20} />, },
+  { label: "Admin", path: "/admin", icon: <MdAdminPanelSettings size={20} /> },
+  {
+    label: "Settings",
+    path: "/settings",
+    icon: <MdOutlineSettings size={20} />,
+  },
 ];
 
 /* =========================================================
    SIDEDRAWER
 ========================================================= */
 
-export default function SideDrawer({ open, setOpen, heightReduce }) {
+export default function SideDrawer({ open, setOpen }) {
   const closeDrawer = () => setOpen(false);
 
   return (
-    <div     
+    <div
       className={`
-        fixed
+        fixed inset-y-0 left-0
         w-64
+        h-screen
         z-40
-        h-[calc(100vh-75px)]
         backdrop-blur-xl
         bg-white/80 dark:bg-zinc-900/80
-        border border-white/30 dark:border-zinc-700
+        border-r border-white/30 dark:border-zinc-700
         shadow-xl shadow-black/5
         transition-transform duration-300 ease-out
-        ${open ? "translate-x-0" : "-translate-x-70"}
+        ${open ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0
-        
+        flex flex-col
       `}
     >
-      <nav className="p-3 space-y-1 text-sm font-medium h-full overflow-y-auto sidebar-scroll">
-
-        <div className="px-4 py-1">
-          <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
-            MENU
+      {/* App Header - Fixed */}
+      <div
+        className="
+          hidden
+          lg:flex
+          h-16
+          items-center justify-center
+          border-b border-zinc-200 dark:border-zinc-700
+        "
+      >
+        <h1 className="flex items-center font-bold tracking-tight">
+          <span className="text-xl md:text-2xl text-zinc-900 dark:text-white">
+            Vibe
           </span>
-        </div>
-
-        <div className="mb-4 pb-3 border-b border-zinc-200 dark:border-zinc-700">
-        {MENU_NAV.map((item) => (
-          <NavItem key={item.label} {...item} onClick={closeDrawer} />
-        ))}
-        </div>
-
-        <div className="px-4 py-1">
-          <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
-            LIBRARY
+          <span
+            className="
+              text-4xl
+              bg-linear-to-r from-blue-600 to-indigo-500
+              bg-clip-text text-transparent
+            "
+          >
+            X
           </span>
-        </div>
+        </h1>
+      </div>
 
-        <div className="mb-4 pb-3 border-b border-zinc-200 dark:border-zinc-700">
-        {LIBRARY_NAV.map((item) => (
-          <NavItem key={item.label} {...item} onClick={closeDrawer} />
-        ))}
-        </div>
+      {/* Scrollable Content */}
+      <div className="flex-1 overflow-y-auto sidebar-scroll">
+        <nav className="p-3 space-y-1 text-sm font-medium">
+          {/* MENU */}
+          <div className="px-4 py-1">
+            <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
+              MENU
+            </span>
+          </div>
 
-        <div className="px-4 py-1">
-          <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
-            PLAYLIST AND FAVORITE
-          </span>
-        </div>
+          <div className="mb-4 pb-3 border-b border-zinc-200 dark:border-zinc-700">
+            {MENU_NAV.map((item) => (
+              <NavItem key={item.label} {...item} onClick={closeDrawer} />
+            ))}
+          </div>
 
-        <div className="mb-4 pb-3 border-b border-zinc-200 dark:border-zinc-700">
-          {PLAY_FAV_NAV.map((item) => (
-            <NavItem key={item.label} {...item} onClick={closeDrawer} />
-          ))}
-        </div>
+          {/* LIBRARY */}
+          <div className="px-4 py-1">
+            <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
+              LIBRARY
+            </span>
+          </div>
 
-        <div className="px-4 py-1">
-          <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
-            GENERAL
-          </span>
-        </div>
+          <div className="mb-4 pb-3 border-b border-zinc-200 dark:border-zinc-700">
+            {LIBRARY_NAV.map((item) => (
+              <NavItem key={item.label} {...item} onClick={closeDrawer} />
+            ))}
+          </div>
 
-        <div className="mb-4">
-          {FOOTER_NAV.map((item) => (
-            <NavItem key={item.label} {...item} onClick={closeDrawer} />
-          ))}
-        </div>
+          {/* PLAYLIST */}
+          <div className="px-4 py-1">
+            <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
+              PLAYLIST & FAVORITES
+            </span>
+          </div>
 
-       
-      </nav>
+          <div className="mb-4 pb-3 border-b border-zinc-200 dark:border-zinc-700">
+            {PLAY_FAV_NAV.map((item) => (
+              <NavItem key={item.label} {...item} onClick={closeDrawer} />
+            ))}
+          </div>
+
+          {/* GENERAL */}
+          <div className="px-4 py-1">
+            <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
+              GENERAL
+            </span>
+          </div>
+
+          <div className="mb-4">
+            {FOOTER_NAV.map((item) => (
+              <NavItem key={item.label} {...item} onClick={closeDrawer} />
+            ))}
+          </div>
+        </nav>
+      </div>
     </div>
   );
 }
-
 
 /* =========================================================
    NAV ITEM
@@ -169,7 +231,7 @@ function NavItem({ icon, label, path, onClick }) {
       </span>
 
       {/* Label */}
-      <span 
+      <span
         className="tracking-wide 
           transition-transform duration-200 
           group-hover:scale-105
