@@ -32,7 +32,7 @@ function SongPlayerCard({
     <div className="h-full flex justify-center">
       <div
         className="
-          w-full max-w-md
+          w-full ml-2
           rounded-3xl
           bg-white/70 dark:bg-zinc-900/70
           backdrop-blur-xl

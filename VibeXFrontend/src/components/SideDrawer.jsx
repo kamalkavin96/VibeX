@@ -7,19 +7,39 @@ import {
   MdOutlineSettings,
   MdPlayArrow,
 } from "react-icons/md";
+import { useEffect } from "react";
+import { RiHome3Line, RiPlayList2Fill } from "react-icons/ri";
+import { FaPlay, FaRegCompass, FaRegHeart } from "react-icons/fa";
+import { IoMdAlbums } from "react-icons/io";
+import { PiClockBold, PiClockClockwiseBold, PiFolderSimpleUserBold, PiPlayBold } from "react-icons/pi";
+import { IoAlbumsOutline, IoPlayOutline } from "react-icons/io5";
+import { LuAlbum } from "react-icons/lu";
 
 /* =========================================================
    SIDEBAR CONFIG
 ========================================================= */
 
-const MAIN_NAV = [
-  { label: "Songs", path: "/songs", icon: <MdMusicNote size={24} /> },
-  // { label: "Song Player", path: "/song-player", icon: <MdPlayArrow size={26} />,},
+const MENU_NAV = [
+  { label: "Home", path: "/home", icon: <RiHome3Line  size={20} /> },
+  { label: "Discover", path: "/discover-songs", icon: <FaRegCompass size={20} /> },
+  { label: "Album", path: "/album", icon: <LuAlbum size={20} /> },
+  { label: "Artist", path: "/artist", icon: <PiFolderSimpleUserBold  size={20} /> },
+  { label: "Player", path: "/song-player", icon: <PiPlayBold size={20} />,},
+];
+
+const LIBRARY_NAV = [
+  { label: "Recently Added", path: "/recently-added", icon: <PiClockBold  size={20} /> },
+  { label: "Most Played", path: "/most-played", icon: <PiClockClockwiseBold size={20} /> },
+];
+
+const PLAY_FAV_NAV = [
+  { label: "Your favorites", path: "/your-favorites", icon: <FaRegHeart  size={20} /> },
+  { label: "Your playlist", path: "/playlist", icon: <RiPlayList2Fill size={20} /> },
 ];
 
 const FOOTER_NAV = [
-  { label: "Admin", path: "/admin", icon: <MdAdminPanelSettings size={24} />, },
-  { label: "Settings", path: "/settings", icon: <MdOutlineSettings size={24} />, },
+  { label: "Admin", path: "/admin", icon: <MdAdminPanelSettings size={20} />, },
+  { label: "Settings", path: "/settings", icon: <MdOutlineSettings size={20} />, },
 ];
 
 /* =========================================================
@@ -29,6 +49,10 @@ const FOOTER_NAV = [
 export default function SideDrawer({ open, setOpen, heightReduce }) {
   const closeDrawer = () => setOpen(false);
 
+  useEffect(() => {
+    window.scrollTo(0, 10);
+  }, []);
+
   return (
     <aside     
       className={`
@@ -36,7 +60,7 @@ export default function SideDrawer({ open, setOpen, heightReduce }) {
         top-17.5  /* header height + top gap */
         left-2
         w-64
-        h-[calc(100vh-70px-80px-16px)]
+        h-[calc(100vh-80px)]
         z-40
         rounded-2xl
         backdrop-blur-xl
@@ -46,19 +70,62 @@ export default function SideDrawer({ open, setOpen, heightReduce }) {
         transition-transform duration-300 ease-out
         ${open ? "translate-x-0" : "-translate-x-70"}
         lg:translate-x-0
+        no-scrollbar
+        custom-scrollbar
       `}
       
     >
-      <nav className="p-3 space-y-1 text-sm font-medium h-full overflow-y-auto">
-        {MAIN_NAV.map((item) => (
+      <nav className="p-3 space-y-1 text-sm font-medium h-full overflow-y-auto sidebar-scroll">
+
+        <div className="px-4 py-1">
+          <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
+            MENU
+          </span>
+        </div>
+
+        <div className="mb-4 pb-3 border-b border-zinc-200 dark:border-zinc-700">
+        {MENU_NAV.map((item) => (
           <NavItem key={item.label} {...item} onClick={closeDrawer} />
         ))}
+        </div>
 
-        <div className="mt-4 pt-3 border-t border-zinc-200 dark:border-zinc-700">
+        <div className="px-4 py-1">
+          <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
+            LIBRARY
+          </span>
+        </div>
+
+        <div className="mb-4 pb-3 border-b border-zinc-200 dark:border-zinc-700">
+        {LIBRARY_NAV.map((item) => (
+          <NavItem key={item.label} {...item} onClick={closeDrawer} />
+        ))}
+        </div>
+
+        <div className="px-4 py-1">
+          <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
+            PLAYLIST AND FAVORITE
+          </span>
+        </div>
+
+        <div className="mb-4 pb-3 border-b border-zinc-200 dark:border-zinc-700">
+          {PLAY_FAV_NAV.map((item) => (
+            <NavItem key={item.label} {...item} onClick={closeDrawer} />
+          ))}
+        </div>
+
+        <div className="px-4 py-1">
+          <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
+            GENERAL
+          </span>
+        </div>
+
+        <div className="mb-4">
           {FOOTER_NAV.map((item) => (
             <NavItem key={item.label} {...item} onClick={closeDrawer} />
           ))}
         </div>
+
+       
       </nav>
     </aside>
   );

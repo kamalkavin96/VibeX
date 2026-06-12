@@ -14,7 +14,7 @@ import SongHome from "../pages/SongHome";
 import { useState } from "react";
 
 export default function AppRoutes() {
-  const [playerOpen, setPLayerOpen] = useState(true);
+  const [playerOpen, setPLayerOpen] = useState(false);
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
@@ -23,7 +23,7 @@ export default function AppRoutes() {
         <Route path="/" element={<SongHome />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/playlist" element={<PlaylistsView />} />
-        <Route path="/songs" element={<SongHome />} />
+        <Route path="/home" element={<SongHome />} />
         <Route path="/discover-songs" element={<SongsView playerOpen={playerOpen}/>} />
         <Route path="/test" element={<TestPage></TestPage>}/>
 
