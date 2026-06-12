@@ -26,10 +26,28 @@ export default function AppLayout({playerOpen}) {
   }, [dark]);
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-black">
+    <div className="h-screen flex flex-col">
+
+
+    <header class="h-16 text-white flex items-center">
+         <Header open={open} setOpen={setOpen} dark={dark} setDark={setDark} />
+    </header>
+
+    <main class="flex-1 flex overflow-hidden">
+
+       <aside className={` lg:w-64 ${open ? "" : " w-0"} py-1.5 text-white overflow-y-auto bg-zinc-100 dark:bg-black`}>
+            <SideDrawer open={open} setOpen={setOpen}/>
+        </aside>
+
+        {/* Content */}
+        <section className="flex-1 overflow-y-auto sidebar-scroll">
+            <Outlet />
+        </section>
+        {/* <Outlet /> */}
+    </main>
 
       {/* HEADER */}
-      <Header open={open} setOpen={setOpen} dark={dark} setDark={setDark} />
+      {/* <Header open={open} setOpen={setOpen} dark={dark} setDark={setDark} /> */}
 
       {/* MOBILE OVERLAY */}
       {open && (
@@ -40,9 +58,11 @@ export default function AppLayout({playerOpen}) {
       )}
 
       {/* SIDEDRAWER */}
-      <SideDrawer open={open} setOpen={setOpen} heightReduce={playerOpen ? "10.7" : "4.3"}/>
+      {/* <SideDrawer open={open} setOpen={setOpen} heightReduce={playerOpen ? "10.7" : "4.3"}/> */}
 
-      <Outlet />
+
+      
+      {/* <Outlet /> */}
       {playerOpen && <BottomMusicPlayer></BottomMusicPlayer>}
       
 

@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { FaPlay, FaHeart, FaFire, FaMusic, FaList } from "react-icons/fa";
 import { MdFlashOn } from "react-icons/md";
+import MainContent from "../components/MainContent";
 
 /* ---------- COMPONENT ---------- */
 function SongHome() {
@@ -39,14 +40,7 @@ function SongHome() {
   ];
 
   return (
-    <main
-      className="
-        pt-12 lg:pl-64 min-h-screen
-        bg-linear-to-b from-gray-50 to-gray-100
-        dark:from-black dark:to-zinc-900
-        text-gray-900 dark:text-gray-100
-      "
-    >
+    <MainContent>
       <div className="px-4 sm:px-6 py-6 max-w-7xl mx-auto space-y-12">
         {/* HERO */}
         <section className="space-y-2">
@@ -207,7 +201,7 @@ function SongHome() {
           </div>
         </section>
       </div>
-    </main>
+    </MainContent>
   );
 }
 

@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { getAllBucketLists } from "../../services/bucketManagementService";
+import MainContent from "../../components/MainContent";
+import { useNavigate } from "react-router";
+
+import { MdOutlineArrowBackIosNew } from "react-icons/md";
 
 /* ---------- ICONS ---------- */
 
@@ -61,6 +65,8 @@ const EyeIcon = ({ className }) => (
 function BucketManager() {
   const [buckets, setBuckets] = useState([]);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchBuckets = async () => {
       try {
@@ -81,22 +87,38 @@ function BucketManager() {
   // ];
 
   return (
-    <main
-      className="
-        pt-12 lg:pl-64 min-h-screen
-        bg-linear-to-b from-gray-50 to-gray-100
-        dark:from-black dark:to-zinc-900
-        text-gray-900 dark:text-gray-100
-      "
-    >
+    <MainContent>
       <div className="px-4 sm:px-6 py-6 max-w-7xl mx-auto space-y-8">
         {/* Header */}
         <header className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-semibold">MinIO Buckets</h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Object storage buckets overview
-            </p>
+            <div className="flex items-center gap-3">
+
+              <button
+                onClick={() => navigate(-1)}
+                className="
+                  group
+                  flex items-center justify-center
+                  h-11 w-11
+                  rounded-2xl
+                  bg-gray-100 dark:bg-zinc-800
+                  hover:bg-gray-200 dark:hover:bg-zinc-700
+                  transition-all duration-200
+                  hover:shadow-2xl
+                  border
+                "
+              >
+                <MdOutlineArrowBackIosNew className="text-lg group-hover:-translate-x-1 transition-transform" />
+              </button>
+
+              <div className="flex flex-col">
+                <h1 className="text-3xl font-semibold">MinIO Buckets</h1>
+
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Object storage buckets overview
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* New Bucket Button */}
@@ -153,7 +175,8 @@ function BucketManager() {
                 <div>
                   <p className="font-medium">{bucket.name}</p>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
-                    created on {bucket.creationDate} | {bucket.objectCount} objects | {bucket.totalSizeReadable}
+                    created on {bucket.creationDate} | {bucket.objectCount}{" "}
+                    objects | {bucket.totalSizeReadable}
                   </p>
                 </div>
               </div>
@@ -190,7 +213,7 @@ function BucketManager() {
           ))}
         </section>
       </div>
-    </main>
+    </MainContent>
   );
 }
 

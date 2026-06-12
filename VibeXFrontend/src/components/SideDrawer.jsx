@@ -49,20 +49,13 @@ const FOOTER_NAV = [
 export default function SideDrawer({ open, setOpen, heightReduce }) {
   const closeDrawer = () => setOpen(false);
 
-  useEffect(() => {
-    window.scrollTo(0, 10);
-  }, []);
-
   return (
-    <aside     
+    <div     
       className={`
         fixed
-        top-17.5  /* header height + top gap */
-        left-2
         w-64
-        h-[calc(100vh-80px)]
         z-40
-        rounded-2xl
+        h-[calc(100vh-75px)]
         backdrop-blur-xl
         bg-white/80 dark:bg-zinc-900/80
         border border-white/30 dark:border-zinc-700
@@ -70,10 +63,8 @@ export default function SideDrawer({ open, setOpen, heightReduce }) {
         transition-transform duration-300 ease-out
         ${open ? "translate-x-0" : "-translate-x-70"}
         lg:translate-x-0
-        no-scrollbar
-        custom-scrollbar
+        
       `}
-      
     >
       <nav className="p-3 space-y-1 text-sm font-medium h-full overflow-y-auto sidebar-scroll">
 
@@ -127,7 +118,7 @@ export default function SideDrawer({ open, setOpen, heightReduce }) {
 
        
       </nav>
-    </aside>
+    </div>
   );
 }
 

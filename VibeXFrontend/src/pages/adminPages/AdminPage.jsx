@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import MainContent from "../../components/MainContent";
 
 /* ---------- SVG ICONS ---------- */
 
@@ -52,14 +53,8 @@ function AdminPage() {
   ];
 
   return (
-    <main
-      className="
-        pt-12 lg:pl-64 min-h-screen
-        bg-linear-to-b from-gray-50 to-gray-100
-        dark:from-black dark:to-zinc-900
-        text-gray-900 dark:text-gray-100
-      "
-    >
+    <MainContent>
+   
       <div className="px-4 sm:px-6 py-6 max-w-7xl mx-auto space-y-10">
         {/* Header */}
         <header className="space-y-2">
@@ -135,7 +130,7 @@ function AdminPage() {
 
         <Outlet></Outlet>
       </div>
-    </main>
+    </MainContent>
   );
 }
 

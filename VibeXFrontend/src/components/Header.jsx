@@ -7,7 +7,7 @@ import ThemeToggle from "./ThemeToggle";
 ----------------------------------- */
 function AppTitle() {
   return (
-    <h1 className="ml-4 flex items-center font-bold tracking-tight">
+    <h1 className="lg:ml-4 flex items-center font-bold tracking-tight">
       <span className="text-xl md:text-2xl text-zinc-900 dark:text-white">
         Vibe
       </span>
@@ -31,14 +31,13 @@ export default function Header({ open, setOpen, dark, setDark }) {
   const notificationCount = 3; // mock count
 
   return (
-    <header
+    <div
       className="
         fixed
         h-16
         w-full
         z-40
         flex items-center justify-between
-        px-2
         backdrop-blur-xl
         bg-white/80 dark:bg-zinc-900/80
         border-b border-white/20 dark:border-zinc-700
@@ -52,7 +51,7 @@ export default function Header({ open, setOpen, dark, setDark }) {
           aria-label="Open menu"
           className="
             lg:hidden
-            p-1 rounded-xl
+            p-3 rounded-xl
             text-zinc-700 dark:text-zinc-200
             hover:bg-black/5 dark:hover:bg-white/5
             active:scale-95
@@ -121,6 +120,6 @@ export default function Header({ open, setOpen, dark, setDark }) {
           </button>
         </Link>
       </div>
-    </header>
+    </div>
   );
 }
