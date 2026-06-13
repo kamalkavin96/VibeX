@@ -106,7 +106,6 @@ export default function SideDrawer({ open, setOpen }) {
           lg:flex
           h-16
           items-center justify-center
-          border-b border-zinc-200 dark:border-zinc-700
         "
       >
         <h1 className="flex items-center font-bold tracking-tight">

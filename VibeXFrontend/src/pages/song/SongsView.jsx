@@ -49,9 +49,7 @@ export default function SongsView({ playerOpen }) {
     <MainContent>
       <div
         className="w-full m-1 overflow-hidden custom-scrollbar"
-        style={{
-          height: `calc(100vh - ${playerOpen ? "10.5" : "4.7"}rem)`,
-        }}
+       
       >
         <div className="max-w-7xl 2xl:max-w-full px-4 py-1 space-y-8">
           {/* HEADER */}

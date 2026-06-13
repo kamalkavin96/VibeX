@@ -2,10 +2,10 @@ package com.kamalkavin96.VibeXBackend.service;
 
 import com.kamalkavin96.VibeXBackend.configuration.MinioProperties;
 import io.minio.*;
+import io.minio.errors.ErrorResponseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 
 import java.io.InputStream;
 import java.util.UUID;
@@ -20,7 +20,7 @@ public class MinioStorageService {
     public String uploadPlaylistImage(MultipartFile file) {
         try {
             String extension = getExtension(file.getOriginalFilename());
-            String objectKey =  UUID.randomUUID() + extension;
+            String objectKey = UUID.randomUUID() + extension;
 
             minioClient.putObject(
                     PutObjectArgs.builder()
@@ -29,11 +29,9 @@ public class MinioStorageService {
                             .stream(
                                     file.getInputStream(),
                                     file.getSize(),
-                                    -1
-                            )
+                                    -1)
                             .contentType(file.getContentType())
-                            .build()
-            );
+                            .build());
 
             return objectKey; // store in DB
 
@@ -48,27 +46,25 @@ public class MinioStorageService {
                     RemoveObjectArgs.builder()
                             .bucket(properties.getBuckets().get("playlist-images"))
                             .object(fileKey)
-                            .build()
-            );
+                            .build());
         } catch (Exception e) {
             throw new RuntimeException("Failed to delete play list image: " + fileKey, e);
         }
     }
 
-    public String uploadFile(MultipartFile file, String bucketKey, String folderName){
+    public String uploadFile(MultipartFile file, String bucketKey, String folderName) {
         try {
             String extension = getExtension(file.getOriginalFilename());
-            String objectKey =  UUID.randomUUID() + extension;
-            String folderObjectKey = folderName +"/" + objectKey;
+            String objectKey = UUID.randomUUID() + extension;
+            String folderObjectKey = folderName + "/" + objectKey;
 
             minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(properties.getBuckets().get(bucketKey))
                             .object(folderObjectKey)
-                            .stream(file.getInputStream(), file.getSize(),-1)
+                            .stream(file.getInputStream(), file.getSize(), -1)
                             .contentType(file.getContentType())
-                            .build()
-            );
+                            .build());
             return objectKey;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -80,11 +76,30 @@ public class MinioStorageService {
             return minioClient.getObject(
                     GetObjectArgs.builder()
                             .bucket(properties.getBuckets().get(bucketKey))
-                            .object(folderName+"/"+fileKey)
-                            .build()
-            );
+                            .object(folderName + "/" + fileKey)
+                            .build());
         } catch (Exception e) {
             throw new RuntimeException("Failed to fetch file: " + fileKey, e);
+        }
+    }
+
+    public boolean fileExists(String fileKey, String bucketKey, String folderName) {
+
+        try {
+            minioClient.statObject(
+                    StatObjectArgs.builder()
+                            .bucket(properties.getBuckets().get(bucketKey))
+                            .object(folderName + "/" + fileKey)
+                            .build());
+            return true;
+
+        } catch (ErrorResponseException e) {
+            if ("NoSuchKey".equals(e.errorResponse().code())) {
+                return false;
+            }
+            throw new RuntimeException("Failed to check file existence", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to check file existence", e);
         }
     }
 
@@ -93,9 +108,8 @@ public class MinioStorageService {
             minioClient.removeObject(
                     RemoveObjectArgs.builder()
                             .bucket(properties.getBuckets().get(bucketKey))
-                            .object(folderName+"/"+fileKey)
-                            .build()
-            );
+                            .object(folderName + "/" + fileKey)
+                            .build());
         } catch (Exception e) {
             throw new RuntimeException("Failed to delete song file: " + fileKey, e);
         }
@@ -106,11 +120,10 @@ public class MinioStorageService {
             return minioClient.getObject(
                     GetObjectArgs.builder()
                             .bucket(properties.getBuckets().get("song-files"))
-                            .object("songs/"+songKey)
+                            .object("songs/" + songKey)
                             .offset(offset)
                             .length(length)
-                            .build()
-            );
+                            .build());
         } catch (Exception e) {
             throw new RuntimeException("Failed to fetch song chunk", e);
         }
@@ -121,9 +134,8 @@ public class MinioStorageService {
             return minioClient.statObject(
                     StatObjectArgs.builder()
                             .bucket(properties.getBuckets().get(bucketKey))
-                            .object(folderName+"/" + thumbnailKey)
-                            .build()
-            );
+                            .object(folderName + "/" + thumbnailKey)
+                            .build());
         } catch (Exception e) {
             throw new RuntimeException("Failed to stat file", e);
         }
@@ -133,13 +145,11 @@ public class MinioStorageService {
         try {
 
             String folderObjectKey;
-            if (existingKey.isEmpty()){
+            if (existingKey.isEmpty()) {
                 String extension = getExtension(file.getOriginalFilename());
-                existingKey =  UUID.randomUUID() + extension;
+                existingKey = UUID.randomUUID() + extension;
             }
-                folderObjectKey = folderName +"/" + existingKey;
-
-
+            folderObjectKey = folderName + "/" + existingKey;
 
             minioClient.putObject(
                     PutObjectArgs.builder()
@@ -147,8 +157,7 @@ public class MinioStorageService {
                             .object(folderObjectKey)
                             .stream(file.getInputStream(), file.getSize(), -1)
                             .contentType(file.getContentType())
-                            .build()
-            );
+                            .build());
         } catch (Exception e) {
             throw new RuntimeException("Failed to replace file: " + existingKey, e);
         }
@@ -156,7 +165,8 @@ public class MinioStorageService {
     }
 
     private String getExtension(String filename) {
-        if (filename == null || !filename.contains(".")) return "";
+        if (filename == null || !filename.contains("."))
+            return "";
         return filename.substring(filename.lastIndexOf("."));
     }
 
@@ -166,8 +176,7 @@ public class MinioStorageService {
                     GetObjectArgs.builder()
                             .bucket(bucket)
                             .object(objectKey)
-                            .build()
-            );
+                            .build());
         } catch (Exception e) {
             throw new RuntimeException("Failed to fetch image from MinIO", e);
         }

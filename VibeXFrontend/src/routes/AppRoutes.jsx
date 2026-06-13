@@ -13,6 +13,8 @@ import NotFoundPage from "../pages/NotFoundPage";
 import SongHome from "../pages/SongHome";
 import { useState } from "react";
 import SettingsPage from "../pages/SettingsPage";
+import AlbumPage from "../pages/Album.page";
+import ArtistPage from "../pages/ArtistPage";
 
 export default function AppRoutes() {
   const [playerOpen, setPLayerOpen] = useState(false);
@@ -28,6 +30,9 @@ export default function AppRoutes() {
         <Route path="/discover-songs" element={<SongsView playerOpen={playerOpen}/>} />
         <Route path="/test" element={<TestPage></TestPage>}/>
         <Route path="/settings" element={<SettingsPage></SettingsPage>}/>
+        <Route path="/album" element={<AlbumPage></AlbumPage>}/>
+        <Route path="/artist" element={<ArtistPage></ArtistPage>}/>
+
 
         <Route path="song-player">
           <Route index element={<SongPlayer2 />} />

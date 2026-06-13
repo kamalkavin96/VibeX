@@ -12,12 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(
-        name = "album",
-        indexes = {
-                @Index(name = "idx_album_name", columnList = "name")
-        }
-)
+@Table(name = "album")
 public class Album {
 
     @Id
