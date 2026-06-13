@@ -61,25 +61,47 @@ export default function ArtistPage() {
         <div className="max-w-7xl mx-auto px-4 py-1 space-y-8">
           {/* HEADER */}
 
-          <header className="flex items-center justify-between mb-3">
+          <header
+            className="
+              flex
+              flex-col
+              md:flex-row
+              md:items-center
+              md:justify-between
+              gap-4
+              mb-4
+            "
+          >
+            {/* Left Section */}
             <div>
-              <h2 className="text-3xl font-semibold">Artists</h2>
+              <h2 className="text-2xl md:text-3xl font-semibold">Artists</h2>
 
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Manage your music artists
               </p>
             </div>
 
-            <div className="flex items-center gap-3">
+            {/* Right Section */}
+            <div
+              className="
+                flex
+                flex-col
+                sm:flex-row
+                gap-3
+                w-full
+                md:w-auto
+              "
+            >
               <input
                 type="text"
                 placeholder="Search artists..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="
-                  w-64
+                  w-full
+                  sm:w-64
                   px-4
-                  py-2
+                  py-2.5
                   rounded-xl
                   border
                   border-gray-300
@@ -87,20 +109,29 @@ export default function ArtistPage() {
                   bg-white
                   dark:bg-zinc-900
                   outline-none
+                  focus:ring-2
+                  focus:ring-blue-500/30
                 "
               />
 
               <button
                 onClick={() => setCreateOpen(true)}
                 className="
-                  px-4 py-2
-                  rounded-full
+                  w-full
+                  sm:w-auto
+                  px-5
+                  py-2.5
+                  rounded-xl
                   bg-linear-to-r
                   from-blue-500
                   to-indigo-500
                   text-white
                   text-sm
                   font-medium
+                  shadow-md
+                  hover:shadow-lg
+                  transition-all
+                  duration-200
                 "
               >
                 + Add Artist
@@ -160,9 +191,7 @@ export default function ArtistPage() {
               onClose={() => setCreateOpen(false)}
               onCreate={async (payload) => {
                 await createArtist(payload);
-
                 setCreateOpen(false);
-
                 setReloadArtists((prev) => !prev);
               }}
             />
@@ -176,9 +205,7 @@ export default function ArtistPage() {
               onClose={() => setEditOpen(false)}
               onEdit={async (payload) => {
                 await updateArtist(payload);
-
                 setEditOpen(false);
-
                 setReloadArtists((prev) => !prev);
               }}
             />
@@ -192,9 +219,7 @@ export default function ArtistPage() {
               onClose={() => setDeleteOpen(false)}
               onDelete={async () => {
                 await deleteArtist(deleteId);
-
                 setDeleteOpen(false);
-
                 setReloadArtists((prev) => !prev);
               }}
             />

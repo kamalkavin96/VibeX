@@ -34,7 +34,7 @@ export default function ArtistCreateModal({ onClose, onCreate }) {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 flex justify-center items-center">
-      <div className="w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-3xl p-6">
+      <div className="w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-3xl p-6 h-150 scroll-auto overflow-auto">
         <h3 className="text-2xl font-semibold mb-5">Create Artist</h3>
 
         <div className="space-y-4">

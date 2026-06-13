@@ -63,7 +63,7 @@ export default function ArtistEditModal({ artist, onClose, onEdit }) {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center px-4">
-      <div className="w-full max-w-2xl rounded-3xl bg-white dark:bg-zinc-900 p-6 shadow-2xl">
+      <div className="w-full max-w-2xl rounded-3xl bg-white dark:bg-zinc-900 p-6 shadow-2xl h-150 scroll-auto overflow-auto">
         {/* Header */}
         <div className="mb-6">
           <h3 className="text-2xl font-semibold">Edit Artist</h3>
