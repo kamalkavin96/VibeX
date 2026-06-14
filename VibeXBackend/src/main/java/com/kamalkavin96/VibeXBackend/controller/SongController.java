@@ -26,16 +26,15 @@ public class SongController {
     public ResponseEntity<SongResponse> create(
 
             @RequestParam("title") String title,
-            @RequestParam("albumName") String albumName,
-            @RequestParam("singerName") String singerName,
+            @RequestParam("albumId") UUID albumId,
+            @RequestParam("artistIds") List<UUID> artistIds,
 
             @RequestPart("songFile") MultipartFile songFile,
-            @RequestPart("thumbnailFile") MultipartFile thumbnailFile
-    ) {
+            @RequestPart("thumbnailFile") MultipartFile thumbnailFile) {
         SongCreateRequest request = new SongCreateRequest();
         request.setTitle(title);
-        request.setAlbumName(albumName);
-        request.setSingerName(singerName);
+        request.setAlbumId(albumId);
+        request.setArtistIds(artistIds);
         return ResponseEntity.ok(songService.createWithFile(request, songFile, thumbnailFile));
     }
 
@@ -49,42 +48,36 @@ public class SongController {
         return ResponseEntity.ok(songService.getAllByPlayListId(playListId));
     }
 
-
-
     @GetMapping
     public ResponseEntity<List<SongResponse>> getAll() {
         return ResponseEntity.ok(songService.getAll());
     }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<SongResponse> update(
-//            @PathVariable UUID id,
-//            @RequestBody SongUpdateRequest request
-//    ) {
-//        return ResponseEntity.ok(songService.update(id, request));
-//
-//    }
+    // @PutMapping("/{id}")
+    // public ResponseEntity<SongResponse> update(
+    // @PathVariable UUID id,
+    // @RequestBody SongUpdateRequest request
+    // ) {
+    // return ResponseEntity.ok(songService.update(id, request));
+    //
+    // }
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<SongResponse> update(
-            @RequestParam UUID id,
-            @RequestParam String title,
-            @RequestParam String albumName,
-            @RequestParam String singerName,
+            @RequestParam("id") UUID id,
+            @RequestParam("title") String title,
+            @RequestParam("albumId") UUID albumId,
+            @RequestParam("artistIds") List<UUID> artistIds,
 
-            @RequestPart(value = "thumbnailFile", required = false)
-            MultipartFile thumbnailFile
-    ) {
+            @RequestPart(value = "thumbnailFile", required = false) MultipartFile thumbnailFile) {
         SongUpdateRequest request = new SongUpdateRequest();
         request.setId(id);
         request.setTitle(title);
-        request.setAlbumName(albumName);
-        request.setSingerName(singerName);
+        request.setAlbumId(albumId);
+        request.setArtistIds(artistIds);
 
         return ResponseEntity.ok(songService.update(request, thumbnailFile));
     }
-
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
@@ -95,14 +88,12 @@ public class SongController {
     @GetMapping("/{id}/stream")
     public ResponseEntity<?> streamSong(
             @PathVariable UUID id,
-            @RequestHeader(value = HttpHeaders.RANGE, required = false) String range
-    ) {
+            @RequestHeader(value = HttpHeaders.RANGE, required = false) String range) {
         return songService.streamSong(id, range);
     }
 
-
-    @GetMapping("/thumbnail/{thumbnailFileKay}")
-    public ResponseEntity<InputStreamResource> getThumbnailFile(@PathVariable String thumbnailFileKay) {
-        return songService.getThumbnailStream(thumbnailFileKay);
+    @GetMapping("/thumbnail/{thumbnailFileKey}")
+    public ResponseEntity<InputStreamResource> getThumbnailFile(@PathVariable String thumbnailFileKey) {
+        return songService.getThumbnailStream(thumbnailFileKey);
     }
 }

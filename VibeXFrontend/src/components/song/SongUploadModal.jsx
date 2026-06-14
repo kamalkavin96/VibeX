@@ -1,28 +1,133 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import Select from "react-select";
 
-function formatAlbumName(name) {
-  return name
-    .replace(/([a-z])([A-Z])/g, "$1 $2")
-    .replace(/\b\w/g, (c) => c.toUpperCase());
-}
+import { getAllAlbums } from "../../services/album.service";
+import { getAllArtists } from "../../services/artist.service";
 
-export default function SongUploadModal({ onClose, onUpload }) {
+export default function SongUploadModal({
+  onClose,
+  onUpload,
+}) {
   const [songFile, setSongFile] = useState(null);
-  const [thumbnailFile, setThumbnailFile] = useState(null);
+  const [thumbnailFile, setThumbnailFile] =
+    useState(null);
 
-  const [songPreviewName, setSongPreviewName] = useState("");
-  const [thumbnailPreview, setThumbnailPreview] = useState(null);
+  const [songPreviewName, setSongPreviewName] =
+    useState("");
+
+  const [thumbnailPreview, setThumbnailPreview] =
+    useState(null);
+
+  const [albums, setAlbums] = useState([]);
+  const [artists, setArtists] = useState([]);
 
   const [meta, setMeta] = useState({
     title: "",
-    albumName: "",
-    singerName: "",
+    albumId: "",
+    artistIds: [],
   });
 
-  /* ---------------- FILE HANDLERS ---------------- */
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [albumData, artistData] =
+          await Promise.all([
+            getAllAlbums(),
+            getAllArtists(),
+          ]);
+
+        setAlbums(albumData || []);
+        setArtists(artistData || []);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  const albumOptions = useMemo(
+    () =>
+      albums.map((album) => ({
+        value: album.id,
+        label: album.title,
+      })),
+    [albums]
+  );
+
+  const artistOptions = useMemo(
+    () =>
+      artists.map((artist) => ({
+        value: artist.id,
+        label: artist.name,
+      })),
+    [artists]
+  );
+
+  const selectStyles = {
+    control: (base) => ({
+      ...base,
+      minHeight: 46,
+      borderRadius: 12,
+      backgroundColor: "#27272a",
+      borderColor: "#3f3f46",
+      boxShadow: "none",
+    }),
+
+    menuPortal: (base) => ({
+      ...base,
+      zIndex: 99999,
+    }),
+
+    menu: (base) => ({
+      ...base,
+      backgroundColor: "#18181b",
+      zIndex: 99999,
+    }),
+
+    option: (base, state) => ({
+      ...base,
+      backgroundColor: state.isFocused
+        ? "#3f3f46"
+        : "#18181b",
+      color: "#fff",
+      cursor: "pointer",
+    }),
+
+    singleValue: (base) => ({
+      ...base,
+      color: "#fff",
+    }),
+
+    input: (base) => ({
+      ...base,
+      color: "#fff",
+    }),
+
+    placeholder: (base) => ({
+      ...base,
+      color: "#a1a1aa",
+    }),
+
+    multiValue: (base) => ({
+      ...base,
+      backgroundColor: "#2563eb",
+    }),
+
+    multiValueLabel: (base) => ({
+      ...base,
+      color: "#fff",
+    }),
+
+    multiValueRemove: (base) => ({
+      ...base,
+      color: "#fff",
+    }),
+  };
 
   const handleSongChange = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
+
     if (!file) return;
 
     setSongFile(file);
@@ -30,11 +135,15 @@ export default function SongUploadModal({ onClose, onUpload }) {
   };
 
   const handleThumbnailChange = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
+
     if (!file) return;
 
     setThumbnailFile(file);
-    setThumbnailPreview(URL.createObjectURL(file));
+
+    setThumbnailPreview(
+      URL.createObjectURL(file)
+    );
   };
 
   const removeThumbnail = () => {
@@ -42,82 +151,147 @@ export default function SongUploadModal({ onClose, onUpload }) {
     setThumbnailPreview(null);
   };
 
-  /* ---------------- SUBMIT ---------------- */
-
   const submit = async () => {
-    if (!songFile) return alert("Please select a song file");
-    if (!thumbnailFile) return alert("Please add a thumbnail");
+    if (!songFile) {
+      alert("Please select a song file");
+      return;
+    }
+
+    if (!thumbnailFile) {
+      alert("Please add a thumbnail");
+      return;
+    }
+
+    if (!meta.title.trim()) {
+      alert("Please enter song title");
+      return;
+    }
+
+    if (!meta.albumId) {
+      alert("Please select album");
+      return;
+    }
+
+    if (meta.artistIds.length === 0) {
+      alert(
+        "Please select at least one artist"
+      );
+      return;
+    }
 
     await onUpload({
       songFile,
       thumbnailFile,
-      ...meta,
+      title: meta.title,
+      albumId: meta.albumId,
+      artistIds: meta.artistIds,
     });
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
-      <div className="w-full max-w-xl rounded-3xl bg-white dark:bg-zinc-900 shadow-2xl p-6">
+    <div
+      className="
+        fixed inset-0 z-50
+        flex items-center justify-center
+        bg-black/60
+        backdrop-blur-sm
+        px-4
+      "
+    >
+      <div
+        className="
+          w-full
+          max-w-4xl
+          rounded-3xl
+          bg-white
+          dark:bg-zinc-900
+          shadow-2xl
+          p-6
+          max-h-[90vh]
+          overflow-y-auto
+          overflow-x-visible
+        "
+      >
         {/* HEADER */}
         <div className="mb-6">
-          <h3 className="text-2xl font-semibold">Upload Song</h3>
+          <h3 className="text-2xl font-semibold">
+            Upload Song
+          </h3>
+
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            Add a new song with metadata and thumbnail
+            Upload a song and map it to albums
+            and artists
           </p>
         </div>
 
         {/* CONTENT */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* THUMBNAIL */}
           <div className="flex flex-col items-center gap-4">
             {thumbnailPreview ? (
               <img
                 src={thumbnailPreview}
-                alt="Thumbnail Preview"
-                className="h-32 w-32 rounded-xl object-cover shadow-md"
+                alt="Thumbnail"
+                className="
+                  h-40
+                  w-40
+                  rounded-2xl
+                  object-cover
+                  shadow-lg
+                "
               />
             ) : (
-              <div className="h-32 w-32 rounded-xl bg-gray-200 dark:bg-zinc-800 flex items-center justify-center text-sm text-gray-500">
+              <div
+                className="
+                  h-40
+                  w-40
+                  rounded-2xl
+                  bg-gray-200
+                  dark:bg-zinc-800
+                  flex
+                  items-center
+                  justify-center
+                "
+              >
                 No Thumbnail
               </div>
             )}
 
             <div className="flex gap-2">
-              {/* ADD / REPLACE */}
               <label className="cursor-pointer">
                 <div
                   className="
-                    px-4 py-2 rounded-xl
-                    text-sm font-medium
-                    bg-green-600 text-white
-                    hover:bg-green-700
-                    shadow-sm hover:shadow-md
-                    transition
+                    px-4 py-2
+                    rounded-xl
+                    bg-blue-600
+                    text-white
+                    hover:bg-blue-700
                   "
                 >
-                  {thumbnailPreview ? "Replace" : "Add Thumbnail"}
+                  {thumbnailPreview
+                    ? "Replace"
+                    : "Add Thumbnail"}
                 </div>
 
                 <input
+                  hidden
                   type="file"
                   accept="image/*"
-                  hidden
-                  onChange={handleThumbnailChange}
+                  onChange={
+                    handleThumbnailChange
+                  }
                 />
               </label>
 
-              {/* REMOVE */}
               {thumbnailPreview && (
                 <button
-                  type="button"
                   onClick={removeThumbnail}
                   className="
-                    px-4 py-2 rounded-xl
-                    text-sm font-medium
-                    bg-red-500 text-white
+                    px-4 py-2
+                    rounded-xl
+                    bg-red-500
+                    text-white
                     hover:bg-red-600
-                    shadow-sm hover:shadow-md
-                    transition
                   "
                 >
                   Remove
@@ -127,10 +301,10 @@ export default function SongUploadModal({ onClose, onUpload }) {
           </div>
 
           {/* FORM */}
-          <div className="sm:col-span-2 space-y-4">
+          <div className="md:col-span-2 space-y-4">
             {/* SONG FILE */}
             <div>
-              <label className="block text-sm font-medium mb-1">
+              <label className="block text-sm font-medium mb-2">
                 Song File
               </label>
 
@@ -138,66 +312,139 @@ export default function SongUploadModal({ onClose, onUpload }) {
                 <label className="cursor-pointer">
                   <div
                     className="
-                      px-4 py-2 rounded-xl
-                      text-sm font-medium
-                      bg-indigo-600 text-white
+                      px-4 py-2
+                      rounded-xl
+                      bg-indigo-600
+                      text-white
                       hover:bg-indigo-700
-                      shadow-sm hover:shadow-md
-                      transition
                     "
                   >
                     Choose Song
                   </div>
 
                   <input
+                    hidden
                     type="file"
                     accept="audio/*"
-                    hidden
-                    onChange={handleSongChange}
+                    onChange={
+                      handleSongChange
+                    }
                   />
                 </label>
 
-                <span className="text-sm truncate max-w-45 text-gray-600 dark:text-gray-400">
-                  {songPreviewName || "No file selected"}
+                <span className="text-sm text-gray-500 truncate">
+                  {songPreviewName ||
+                    "No file selected"}
                 </span>
               </div>
             </div>
 
-            {/* META FIELDS */}
-            {["title", "albumName", "singerName"].map((field) => (
-              <div key={field}>
-                <label className="block text-sm font-medium mb-1">
-                  {formatAlbumName(field)}
-                </label>
-                <input
-                  className="
-                    w-full px-3 py-2 rounded-xl
-                    bg-gray-100 dark:bg-zinc-800
-                    border border-transparent
-                    focus:outline-none focus:ring-2 focus:ring-green-500
-                  "
-                  value={meta[field]}
-                  onChange={(e) =>
-                    setMeta((prev) => ({
-                      ...prev,
-                      [field]: e.target.value,
-                    }))
-                  }
-                />
-              </div>
-            ))}
+            {/* TITLE */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Song Title
+              </label>
+
+              <input
+                value={meta.title}
+                onChange={(e) =>
+                  setMeta((prev) => ({
+                    ...prev,
+                    title: e.target.value,
+                  }))
+                }
+                className="
+                  w-full
+                  px-4 py-2
+                  rounded-xl
+                  bg-gray-100
+                  dark:bg-zinc-800
+                "
+              />
+            </div>
+
+            {/* ALBUM */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Album
+              </label>
+
+              <Select
+                styles={selectStyles}
+                options={albumOptions}
+                isSearchable
+                isClearable
+                placeholder="Search Album..."
+                menuPortalTarget={
+                  document.body
+                }
+                menuPosition="fixed"
+                menuPlacement="top"
+                value={
+                  albumOptions.find(
+                    (a) =>
+                      a.value ===
+                      meta.albumId
+                  ) || null
+                }
+                onChange={(selected) =>
+                  setMeta((prev) => ({
+                    ...prev,
+                    albumId:
+                      selected?.value || "",
+                  }))
+                }
+              />
+            </div>
+
+            {/* ARTISTS */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Artists
+              </label>
+
+              <Select
+                styles={selectStyles}
+                options={artistOptions}
+                isMulti
+                isSearchable
+                closeMenuOnSelect={false}
+                placeholder="Search Artists..."
+                menuPortalTarget={
+                  document.body
+                }
+                menuPosition="fixed"
+                menuPlacement="top"
+                value={artistOptions.filter(
+                  (artist) =>
+                    meta.artistIds.includes(
+                      artist.value
+                    )
+                )}
+                onChange={(selected) =>
+                  setMeta((prev) => ({
+                    ...prev,
+                    artistIds: selected
+                      ? selected.map(
+                          (a) => a.value
+                        )
+                      : [],
+                  }))
+                }
+              />
+            </div>
           </div>
         </div>
 
-        {/* ACTIONS */}
+        {/* FOOTER */}
         <div className="mt-8 flex justify-end gap-3">
           <button
             onClick={onClose}
             className="
-              px-4 py-2 rounded-xl
-              bg-gray-200 dark:bg-zinc-800
-              hover:bg-gray-300 dark:hover:bg-zinc-700
-              transition
+              px-4 py-2
+              rounded-xl
+              bg-gray-200
+              dark:bg-zinc-800
             "
           >
             Cancel
@@ -206,14 +453,14 @@ export default function SongUploadModal({ onClose, onUpload }) {
           <button
             onClick={submit}
             className="
-              px-5 py-2 rounded-xl
+              px-5 py-2
+              rounded-xl
+              bg-green-600
+              hover:bg-green-700
               text-white
-              bg-green-600 hover:bg-green-700
-              shadow-md hover:shadow-lg
-              transition
             "
           >
-            Upload
+            Upload Song
           </button>
         </div>
       </div>

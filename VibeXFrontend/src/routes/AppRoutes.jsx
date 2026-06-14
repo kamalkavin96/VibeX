@@ -13,7 +13,7 @@ import NotFoundPage from "../pages/NotFoundPage";
 import SongHome from "../pages/SongHome";
 import { useState } from "react";
 import SettingsPage from "../pages/SettingsPage";
-import AlbumPage from "../pages/Album.page";
+import AlbumPage from "../pages/AlbumPage";
 import ArtistPage from "../pages/ArtistPage";
 
 export default function AppRoutes() {
@@ -32,6 +32,7 @@ export default function AppRoutes() {
         <Route path="/settings" element={<SettingsPage></SettingsPage>}/>
         <Route path="/album" element={<AlbumPage></AlbumPage>}/>
         <Route path="/artist" element={<ArtistPage></ArtistPage>}/>
+
 
 
         <Route path="song-player">

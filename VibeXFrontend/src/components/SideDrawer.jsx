@@ -19,6 +19,7 @@ import {
 } from "react-icons/pi";
 import { IoAlbumsOutline, IoPlayOutline } from "react-icons/io5";
 import { LuAlbum } from "react-icons/lu";
+import { HiOutlineMusicNote } from "react-icons/hi";
 
 /* =========================================================
    SIDEBAR CONFIG
@@ -27,9 +28,9 @@ import { LuAlbum } from "react-icons/lu";
 const MENU_NAV = [
   { label: "Home", path: "/home", icon: <RiHome3Line size={20} /> },
   {
-    label: "Discover",
+    label: "Songs",
     path: "/discover-songs",
-    icon: <FaRegCompass size={20} />,
+    icon: <HiOutlineMusicNote size={20} />,
   },
   { label: "Album", path: "/album", icon: <LuAlbum size={20} /> },
   {

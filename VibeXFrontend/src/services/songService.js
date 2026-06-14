@@ -22,8 +22,10 @@ export const getSongById = async (id) => {
 };
 
 /* ---------------- UPLOAD ---------------- */
-export const uploadSong = async ({ songFile, thumbnailFile, title, albumName, singerName }) => {
+export const uploadSong = async ({ songFile, thumbnailFile, title, albumId, artistIds }) => {
   const toastId = notifyLoading("Uploading song...");
+
+  console.log({ songFile, thumbnailFile, title, albumId, artistIds })
 
   try {
     const formData = new FormData();
@@ -33,8 +35,8 @@ export const uploadSong = async ({ songFile, thumbnailFile, title, albumName, si
     const res = await api.post("/api/songs", formData, {
       params: {
         title,
-        albumName,
-        singerName,
+        albumId,
+        artistIds,
       },
       headers: {
         "Content-Type": "multipart/form-data",
@@ -68,8 +70,8 @@ export const deleteSong = async (id) => {
 export const updateSong = async ({
   id,
   title,
-  albumName,
-  singerName,
+  albumId,
+  artistIds,
   thumbnailFile, // REQUIRED (as per swagger usage)
 }) => {
   const toastId = notifyLoading("Updating song...");
@@ -84,8 +86,9 @@ export const updateSong = async ({
       params: {
         id,
         title,
-        albumName,
-        singerName,
+        albumId,
+        artistIds,
+        thumbnailFile
       },
       // ❌ DO NOT set Content-Type
     });

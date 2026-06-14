@@ -16,7 +16,6 @@ import PlayListSelectorModal from "../../components/song/PlayListSelectorModal";
 // import { useNavigate } from "react-router";
 import AudioPlayerContext from "../../context/audioContext/AudioPlayerContext";
 
-
 export default function SongsView({ playerOpen }) {
   const [songs, setSongs] = useState([]);
   const [open, setOpen] = useState(false);
@@ -31,7 +30,7 @@ export default function SongsView({ playerOpen }) {
 
   // const navigate = useNavigate();
 
-  const {setSongFunc} = useContext(AudioPlayerContext);
+  const { setSongFunc } = useContext(AudioPlayerContext);
 
   const fetchSongs = async () => {
     const res = await getAllSongs();
@@ -47,10 +46,7 @@ export default function SongsView({ playerOpen }) {
 
   return (
     <MainContent>
-      <div
-        className="w-full m-1 overflow-hidden custom-scrollbar"
-       
-      >
+      <div className="w-full m-1 overflow-hidden custom-scrollbar">
         <div className="max-w-7xl 2xl:max-w-full px-4 py-1 space-y-8">
           {/* HEADER */}
           <header className="flex items-center justify-between mb-3">
@@ -71,26 +67,26 @@ export default function SongsView({ playerOpen }) {
 
           {/* SONG GRID */}
           <section
-  className="
-    grid
-    grid-cols-1
-    sm:grid-cols-2
-    lg:grid-cols-3 
-    2xl:grid-cols-4
-    gap-4
-    overflow-y-auto
-    pr-1
-    custom-scrollbar
-    h-full
+            className="
+                grid
+                grid-cols-1
+                sm:grid-cols-2
+                lg:grid-cols-3 
+                2xl:grid-cols-4
+                gap-4
+                overflow-y-auto
+                pr-1
+                custom-scrollbar
+                h-full
 
-    max-h-(--songs-max-h)
-    2xl:max-h-(--songs-max-h-2xl)
-  "
-  style={{
-    "--songs-max-h": playerOpen ? "63vh" : "77.8vh",
-    "--songs-max-h-2xl": playerOpen ? "74vh" : "84vh",
-  }}
->
+                max-h-(--songs-max-h)
+                2xl:max-h-(--songs-max-h-2xl)
+              "
+            style={{
+              "--songs-max-h": playerOpen ? "63vh" : "77.8vh",
+              "--songs-max-h-2xl": playerOpen ? "74vh" : "84vh",
+            }}
+          >
             {songs.map((song) => (
               <SongCard
                 key={song.id}
@@ -112,7 +108,6 @@ export default function SongsView({ playerOpen }) {
                   // console.log(playSong);
                   // navigate(`/song-player/song/${playSong.id}`);
                   setSongFunc(playSong);
-
                 }}
               />
             ))}

@@ -27,8 +27,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ArtistController {
 
-    private static final String BUCKET_KEY = "artist-images";
-    private static final String FOLDER_NAME = "artists";
+    private static final String BUCKET_KEY = "artist-files";
+    private static final String FOLDER_NAME = "images";
 
     private final ArtistService artistService;
     private final MinioStorageService minioStorageService;
@@ -68,8 +68,8 @@ public class ArtistController {
         if (profileImage != null && !profileImage.isEmpty()) {
             String imageKey = minioStorageService.uploadFile(
                     profileImage,
-                    "artist-images",
-                    "artists");
+                    BUCKET_KEY,
+                    FOLDER_NAME);
             request.setProfileImageUrl(imageKey);
         }
         return artistService.createArtist(request);
@@ -124,8 +124,8 @@ public class ArtistController {
 
             String imageKey = minioStorageService.replaceFile(
                     profileImage,
-                    "artist-images",
-                    "artists",
+                    BUCKET_KEY,
+                    FOLDER_NAME,
                     existingArtist.getProfileImageUrl() == null
                             ? ""
                             : existingArtist.getProfileImageUrl());
@@ -189,8 +189,8 @@ public class ArtistController {
 
         InputStream inputStream = minioStorageService.getFile(
                 profileImageName,
-                "artist-images",
-                "artists");
+                BUCKET_KEY,
+                FOLDER_NAME);
 
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)

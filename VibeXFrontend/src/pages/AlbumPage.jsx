@@ -2,62 +2,53 @@ import { useEffect, useMemo, useState } from "react";
 
 import MainContent from "../components/MainContent";
 
-import ArtistCard from "../components/artist/ArtistCard";
-import ArtistCreateModal from "../components/artist/ArtistCreateModal";
-import ArtistEditModal from "../components/artist/ArtistEditModal";
-import ArtistDeleteModal from "../components/artist/ArtistDeleteModal";
+import AlbumCard from "../components/album/AlbumCard";
+import AlbumCreateModal from "../components/album/AlbumCreateModal";
+import AlbumEditModal from "../components/album/AlbumEditModal";
+import AlbumDeleteModal from "../components/album/AlbumDeleteModal";
+
 import {
-  getAllArtists,
-  createArtist,
-  deleteArtist,
-  updateArtist,
-} from "../services/artist.service";
+  getAllAlbums,
+  createAlbum,
+  updateAlbum,
+  deleteAlbum,
+} from "../services/album.service";
 
-const normalizeArtists = (artists = []) =>
-  artists.map((artist) => ({
-    ...artist,
-    songs: artist.songs ?? Math.floor(Math.random() * 500) + 1,
-  }));
+export default function AlbumPage() {
 
-export default function ArtistPage() {
-  const [artists, setArtists] = useState([]);
-
+  const [albums, setAlbums] = useState([]);
   const [search, setSearch] = useState("");
-
   const [createOpen, setCreateOpen] = useState(false);
-
   const [editOpen, setEditOpen] = useState(false);
-  const [artistEdit, setArtistEdit] = useState(null);
-
+  const [albumEdit, setAlbumEdit] = useState(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const [deleteName, setDeleteName] = useState("");
-
-  const [reloadArtists, setReloadArtists] = useState(false);
+  const [deleteTitle, setDeleteTitle] = useState("");
+  const [reloadAlbums, setReloadAlbums] = useState(false);
 
   useEffect(() => {
-    const fetchArtists = async () => {
+    const fetchAlbums = async () => {
       try {
-        const res = await getAllArtists();
+        const res = await getAllAlbums();
 
-        setArtists(normalizeArtists(res?.data || res || []));
-      } catch (err) {
-        console.error(err);
+        setAlbums(res?.data || res || []);
+      } catch (error) {
+        console.error(error);
       }
     };
 
-    fetchArtists();
-  }, [reloadArtists]);
+    fetchAlbums();
+  }, [reloadAlbums]);
 
-  const filteredArtists = useMemo(() => {
-    return artists.filter((artist) =>
-      artist.name?.toLowerCase().includes(search.toLowerCase()),
+  const filteredAlbums = useMemo(() => {
+    return albums.filter((album) =>
+      album.title?.toLowerCase().includes(search.toLowerCase()),
     );
-  }, [artists, search]);
+  }, [albums, search]);
 
   return (
     <MainContent>
-      <div className=" w-full">
+      <div className="w-full">
         <div className="max-w-7xl mx-auto px-4 py-1 space-y-8">
           {/* HEADER */}
 
@@ -69,19 +60,16 @@ export default function ArtistPage() {
               md:items-center
               md:justify-between
               gap-4
-              mb-1
             "
           >
-            {/* Left Section */}
             <div>
-              <h2 className="text-2xl md:text-3xl font-semibold">Artists</h2>
+              <h2 className="text-2xl md:text-3xl font-semibold">Albums</h2>
 
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Manage your music artists
+                Manage your music albums
               </p>
             </div>
 
-            {/* Right Section */}
             <div
               className="
                 flex
@@ -94,7 +82,7 @@ export default function ArtistPage() {
             >
               <input
                 type="text"
-                placeholder="Search artists..."
+                placeholder="Search albums..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="
@@ -117,8 +105,6 @@ export default function ArtistPage() {
               <button
                 onClick={() => setCreateOpen(true)}
                 className="
-                  w-full
-                  sm:w-auto
                   px-5
                   py-2.5
                   rounded-xl
@@ -126,20 +112,15 @@ export default function ArtistPage() {
                   from-blue-500
                   to-indigo-500
                   text-white
-                  text-sm
-                  font-medium
                   shadow-md
-                  hover:shadow-lg
-                  transition-all
-                  duration-200
                 "
               >
-                + Add Artist
+                + Add Album
               </button>
             </div>
           </header>
 
-          {/* ARTISTS GRID */}
+          {/* GRID */}
 
           <section
             className="
@@ -150,37 +131,36 @@ export default function ArtistPage() {
               lg:grid-cols-4
               xl:grid-cols-5
               gap-5
-              max-h-[89.7vh]
+              max-h-[85.2vh]
               overflow-y-auto
               custom-scrollbar
-              px-2
-              pt-4
+              py-2
             "
           >
-            {filteredArtists.length > 0 ? (
-              filteredArtists.map((artist) => (
-                <ArtistCard
-                  key={artist.id}
-                  artist={artist}
+            {filteredAlbums.length > 0 ? (
+              filteredAlbums.map((album) => (
+                <AlbumCard
+                  key={album.id}
+                  album={album}
                   onEdit={() => {
-                    setArtistEdit(artist);
+                    setAlbumEdit(album);
                     setEditOpen(true);
                   }}
                   onDelete={() => {
-                    setDeleteId(artist.id);
-                    setDeleteName(artist.name);
+                    setDeleteId(album.id);
+                    setDeleteTitle(album.title);
                     setDeleteOpen(true);
                   }}
                   onPlay={() => {
-                    console.log("Play artist", artist);
+                    console.log("Play album", album);
                   }}
                 />
               ))
             ) : (
               <div className="col-span-full text-center py-20">
-                <h3 className="text-lg font-medium">No artists found</h3>
+                <h3 className="text-lg font-medium">No albums found</h3>
 
-                <p className="text-gray-500 mt-2">Create your first artist</p>
+                <p className="text-gray-500 mt-2">Create your first album</p>
               </div>
             )}
           </section>
@@ -188,12 +168,13 @@ export default function ArtistPage() {
           {/* CREATE */}
 
           {createOpen && (
-            <ArtistCreateModal
+            <AlbumCreateModal
               onClose={() => setCreateOpen(false)}
               onCreate={async (payload) => {
-                await createArtist(payload);
+
+                await createAlbum(payload);
                 setCreateOpen(false);
-                setReloadArtists((prev) => !prev);
+                setReloadAlbums((prev) => !prev);
               }}
             />
           )}
@@ -201,13 +182,15 @@ export default function ArtistPage() {
           {/* EDIT */}
 
           {editOpen && (
-            <ArtistEditModal
-              artist={artistEdit}
+            <AlbumEditModal
+              album={albumEdit}
               onClose={() => setEditOpen(false)}
               onEdit={async (payload) => {
-                await updateArtist(payload);
+                await updateAlbum(payload);
+
                 setEditOpen(false);
-                setReloadArtists((prev) => !prev);
+
+                setReloadAlbums((prev) => !prev);
               }}
             />
           )}
@@ -215,13 +198,15 @@ export default function ArtistPage() {
           {/* DELETE */}
 
           {deleteOpen && (
-            <ArtistDeleteModal
-              artistName={deleteName}
+            <AlbumDeleteModal
+              albumTitle={deleteTitle}
               onClose={() => setDeleteOpen(false)}
               onDelete={async () => {
-                await deleteArtist(deleteId);
+                await deleteAlbum(deleteId);
+
                 setDeleteOpen(false);
-                setReloadArtists((prev) => !prev);
+
+                setReloadAlbums((prev) => !prev);
               }}
             />
           )}

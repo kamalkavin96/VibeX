@@ -24,8 +24,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AlbumController {
 
-    private static final String BUCKET = "album-images";
-    private static final String FOLDER = "albums";
+    private static final String BUCKET = "album-files";
+    private static final String FOLDER = "images";
 
     private final AlbumService albumService;
     private final MinioStorageService minioStorageService;

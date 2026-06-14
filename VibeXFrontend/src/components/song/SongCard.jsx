@@ -8,6 +8,8 @@ import {
   unlikeSong,
 } from "../../services/SongLikeService";
 
+import { Disc3, Mic2 } from "lucide-react";
+
 export default function SongCard({
   song,
   onDelete,
@@ -18,6 +20,10 @@ export default function SongCard({
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const [isLiked, setIsLiked] = useState(false);
+
+  const visibleArtists = song.artists?.slice(0, 1) || [];
+
+  const remainingCount = (song.artists?.length || 0) - visibleArtists.length;
 
   /* ---------- FETCH LIKE STATE (ONCE PER SONG) ---------- */
   useEffect(() => {
@@ -89,9 +95,9 @@ export default function SongCard({
     "
     >
       {/* ================= ROW 1 ================= */}
-      <div className="grid grid-cols-2 gap-4 p-4">
+      <div className="flex gap-1 p-2">
         {/* THUMBNAIL */}
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center mr-3">
           <div
             className="
             relative w-28 h-28
@@ -129,28 +135,91 @@ export default function SongCard({
         </div>
 
         {/* DETAILS */}
-        <div className="min-w-0">
-          <h4 className="font-semibold truncate text-zinc-900 dark:text-zinc-100">
+        <div className="min-w-0 flex flex-col justify-center">
+          <h4
+            className="
+              font-bold
+              text-lg
+              truncate
+              text-zinc-900
+              dark:text-white
+            "
+          >
             {song.title}
           </h4>
 
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-1">
-            {song.artist}
-          </p>
+          <div
+            className="
+              mt-2
+              flex items-center
+              gap-2
+              text-xs
+              text-zinc-500
+              dark:text-zinc-400
+            "
+          >
+            <Disc3 size={13} />
+            <span className="truncate">{song.albumTitle}</span>
+          </div>
 
-          <div className="text-[11px] text-zinc-600 dark:text-zinc-400 space-y-0.5">
-            <div>
-              <b>Album:</b> {song.albumName}
-            </div>
-            <div>
-              <b>Singer:</b> {song.singerName}
-            </div>
-            <div>
-              <b>Uploaded:</b> {new Date(song.createdAt).toLocaleDateString()}
-            </div>
-            <div>
-              <b>Updated:</b> {new Date(song.updatedAt).toLocaleDateString()}
-            </div>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {visibleArtists.map((artist, index) => {
+              const badgeColors = [
+                "bg-violet-500/10 text-violet-400 border-violet-500/20",
+                "bg-pink-500/10 text-pink-400 border-pink-500/20",
+                "bg-blue-500/10 text-blue-400 border-blue-500/20",
+                "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+              ];
+
+              return (
+                <span
+                  key={artist.id}
+                  className={`
+          inline-flex
+          items-center
+          gap-1
+
+          px-2.5
+          py-1
+
+          rounded-full
+          border
+
+          text-xs
+          font-medium
+
+          ${badgeColors[index % badgeColors.length]}
+        `}
+                >
+                  <Mic2 size={10} />
+                  {artist.name}
+                </span>
+              );
+            })}
+
+            {remainingCount > 0 && (
+              <span
+                className="
+        inline-flex
+        items-center
+
+        px-2.5
+        py-1
+
+        rounded-full
+
+        bg-zinc-700/20
+        border
+        border-zinc-500/20
+
+        text-zinc-400
+        text-xs
+        font-medium
+      "
+              >
+                +{remainingCount}
+              </span>
+            )}
           </div>
         </div>
       </div>

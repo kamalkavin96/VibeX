@@ -4,26 +4,34 @@ import com.kamalkavin96.VibeXBackend.dto.request.SongCreateRequest;
 import com.kamalkavin96.VibeXBackend.dto.response.SongResponse;
 import com.kamalkavin96.VibeXBackend.model.Song;
 
-public class SongMapper {
+public final class SongMapper {
 
-    public static Song toEntity(SongCreateRequest req) {
+    private SongMapper() {}
+
+    public static Song toEntity(SongCreateRequest request) {
+
         Song song = new Song();
-        song.setTitle(req.getTitle());
-        song.setAlbumName(req.getAlbumName());
-        song.setSingerName(req.getSingerName());
+        song.setTitle(request.getTitle());
         return song;
     }
 
     public static SongResponse toResponse(Song song) {
-        SongResponse res = new SongResponse();
-        res.setId(song.getId());
-        res.setTitle(song.getTitle());
-        res.setAlbumName(song.getAlbumName());
-        res.setSingerName(song.getSingerName());
-        res.setSongKey(song.getSongKey());
-        res.setThumbnailKey(song.getThumbnailKey());
-        res.setCreatedAt(song.getCreatedAt());
-        res.setUpdatedAt(song.getUpdatedAt());
-        return res;
+
+        SongResponse response = new SongResponse();
+        response.setId(song.getId());
+        response.setTitle(song.getTitle());
+
+        if (song.getAlbum() != null) {
+
+            response.setAlbumId(song.getAlbum().getId());
+            response.setAlbumTitle(song.getAlbum().getTitle());
+        }
+
+        response.setSongKey(song.getSongKey());
+        response.setThumbnailKey(song.getThumbnailKey());
+        response.setCreatedAt(song.getCreatedAt());
+        response.setUpdatedAt(song.getUpdatedAt());
+
+        return response;
     }
 }
