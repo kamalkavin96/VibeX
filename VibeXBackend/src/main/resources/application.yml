@@ -6,9 +6,9 @@ spring:
       max-request-size: 500MB
 
   datasource:
-    url: jdbc:postgresql://host:port/vibex_db
-    username: user
-    password: pass
+    url: jdbc:postgresql://pg-29a3f253-haren-0320.i.aivencloud.com:24481/vibex_db
+    username: 
+    password: 
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -24,10 +24,12 @@ spring:
         format_sql: true
 
 minio:
-  url: host-with-port-if
-  access-key: minio-user
-  secret-key: minio-pass
+  url: https://vibex96-vibex-storage.hf.space
+  access-key: 
+  secret-key: 
   buckets:
     playlist-images: playlist-images
     song-files: song-files
     user-avatars: user-avatars
+    artist-files: artist-files
+    album-files: album-files
